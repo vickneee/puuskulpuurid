@@ -10,10 +10,10 @@ const HeroSection = ({ onViewGallery }: HeroSectionProps) => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
       <div
-        className="absolute inset-0 bg-cover bg-center bg-foreground/60 dark:bg-foreground/75"
+        className="absolute inset-0 bg-cover bg-center brightness-55"
         style={{ backgroundImage: `url(${hero})` }}
       />
-      <div className="absolute inset-0 bg-foreground/75 " />
+      <div className="absolute inset-0" />
       <div className="relative z-10 text-center px-6 max-w-3xl mx-auto">
           <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold dark:text-white text-white mb-6 animate-fade-up">
           {t("hero.title")}
