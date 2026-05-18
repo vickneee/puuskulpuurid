@@ -284,17 +284,16 @@ interface LanguageContextValue {
 const LanguageContext = createContext<LanguageContextValue | undefined>(undefined);
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  const [lang, setLangState] = useState<Lang>("et");
+  const [lang, setLangState] = useState<Lang>(() => {
+    if (typeof window === "undefined") return "et";
+
+    const stored = localStorage.getItem("lang");
+    return stored === "et" || stored === "en" || stored === "ru" ? stored : "et";
+  });
 
   useEffect(() => {
-    const stored = localStorage.getItem("lang") as Lang | null;
-    if (stored && (stored === "et" || stored === "en" || stored === "ru")) {
-      setLangState(stored);
-      document.documentElement.lang = stored;
-    } else {
-      document.documentElement.lang = "et";
-    }
-  }, []);
+    document.documentElement.lang = lang;
+  }, [lang]);
 
   const setLang = useCallback((l: Lang) => {
     setLangState(l);
@@ -320,6 +319,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useLanguage = () => {
   const ctx = useContext(LanguageContext);
   if (!ctx) throw new Error("useLanguage must be used within LanguageProvider");
