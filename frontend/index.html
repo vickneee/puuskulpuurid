@@ -4,6 +4,44 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon_io/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Primary meta description for SEO and social previews -->
+    <meta name="description" content="Puuskulptuurid — gallery of wooden sculptures showcasing featured projects, gallery images, and contact information." />
+    <!-- Instruct crawlers to index and follow by default -->
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:title" content="Puuskulptuurid" />
+    <meta property="og:description" content="Puuskulptuurid — gallery of wooden sculptures showcasing featured projects, gallery images, and contact information." />
+    <meta property="og:type" content="website" />
+    <!-- Replace the image URL below with a production preview image if you have one -->
+    <meta property="og:image" content="/favicon_io/site-preview.png" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Puuskulptuurid" />
+    <meta name="twitter:description" content="Puuskulptuurid — gallery of wooden sculptures showcasing featured projects, gallery images, and contact information." />
+    <meta name="twitter:image" content="/favicon_io/site-preview.png" />
+
+    <!--
+      Canonical URL (required to avoid duplicate-content issues).
+      Replace the href below with your site's production absolute URL, for example:
+        https://puuskulptuurid.example/
+      Do not use a relative URL here — canonical must be absolute.
+    -->
+    <link rel="canonical" href="https://your-production-domain.example/" />
+
+    <!-- Preload the hero LCP image so browsers discover and prioritize it early. -->
+    <!-- Uses the optimized WebP produced by the image optimizer. Adjust paths if you change the optimizer output. -->
+    <link rel="preload" as="image" href="/optimized/hero.avif"
+          imagesrcset="/optimized/hero-360.avif 360w, /optimized/hero-480.avif 480w, /optimized/hero-640.avif 640w, /optimized/hero-768.avif 768w, /optimized/hero-1024.avif 1024w, /optimized/hero-1400.avif 1400w"
+          imagesizes="100vw"
+          type="image/avif" />
+
+    <!-- Basic structured data to help crawlers understand this site -->
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@type":"WebSite","name":"Puuskulptuurid","url":"https://your-production-domain.example/","description":"Gallery of wooden sculptures and handcrafted woodwork."}
+    </script>
+
     <title>Puuskulptuurid</title>
   </head>
   <body>

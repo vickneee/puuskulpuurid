@@ -12,7 +12,7 @@ const FeaturedProjects = ({ items }: FeaturedProjectsProps) => {
   if (featured.length === 0) return null;
 
   return (
-    <section className="section-padding py-12">
+    <section className="section-padding">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-14">
           <span className="text-sm font-body font-semibold uppercase tracking-widest text-accent">

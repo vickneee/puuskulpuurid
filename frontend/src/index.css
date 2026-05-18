@@ -62,7 +62,8 @@
     --muted: hsl(33 20% 90%);
     --muted-foreground: hsl(25 15% 45%);
 
-    --accent: hsl(28 55% 45%);
+    /* Increase contrast: reduced lightness from 45% -> 40% so white text meets WCAG AA (4.5:1) */
+    --accent: hsl(28 55% 40%);
     --accent-foreground: hsl(35 40% 95%);
 
     --destructive: hsl(0 84.2% 60.2%);
@@ -117,6 +118,7 @@
     --muted: hsl(25 15% 12%);
     --muted-foreground: hsl(30 15% 65%);
 
+    /* dark theme accent (kept lighter so dark foreground text remains readable) */
     --accent: hsl(32 40% 65%);
     --accent-foreground: hsl(25 30% 10%);
 
