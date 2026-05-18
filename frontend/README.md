@@ -1,5 +1,42 @@
 # React + TypeScript + Vite
 
+## Firebase-backed content
+
+This app stores gallery images in **Firebase Storage** and gallery text/category data in **Firestore**.
+
+### Required Firebase setup
+
+1. Create a Firebase project.
+2. Enable **Authentication** with Email/Password.
+3. Create a Firestore database.
+4. Create a Storage bucket.
+5. Set the environment variables in `frontend/.env`.
+6. Deploy the security rules:
+
+```bash
+cd frontend
+firebase deploy --only firestore:rules,storage
+```
+
+7. Apply the Storage bucket CORS policy so browser uploads and downloads can talk to Firebase Storage without being blocked. This is required even when the app uses the Firebase SDK:
+
+```bash
+gsutil cors set storage-cors.json gs://YOUR_BUCKET_NAME
+```
+
+Replace `YOUR_BUCKET_NAME` with the exact bucket name from the Firebase console or your `.env` file. The repository includes a ready-to-use `storage-cors.json` file with permissive CORS settings for local development and admin uploads.
+
+The provided rules allow:
+- public reads for gallery content
+- authenticated writes for admins
+
+If you still see `Missing or insufficient permissions` or a browser CORS error after uploading, verify:
+- you are signed in as an admin before saving
+- `storage.rules` and `firestore.rules` have been deployed
+- the bucket CORS policy was applied to the same bucket configured in `frontend/.env`
+
+If the database is empty, the UI falls back to bundled starter content until you populate Firebase through the admin dashboard.
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:

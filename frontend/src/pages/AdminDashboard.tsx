@@ -32,21 +32,27 @@ const AdminDashboard = () => {
   useEffect(() => {
     if (authLoading) return;
     if (!isAdmin) { navigate("/admin/login", { replace: true }); return; }
+    let cancelled = false;
+
     const load = async () => {
       try {
         const [fetchedItems, fetchedCats] = await Promise.all([
           getGalleryItems(),
           getCategories(),
         ]);
+        if (cancelled) return;
         setItems(fetchedItems);
         setCategories(fetchedCats);
       } catch {
-        toast.error("Failed to load data");
+        if (!cancelled) toast.error("Failed to load data");
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     };
     load();
+    return () => {
+      cancelled = true;
+    };
   }, [authLoading, isAdmin, navigate]);
 
   const resetForm = () => {
@@ -84,7 +90,7 @@ const AdminDashboard = () => {
             { title: formTitle, description: formDesc, category: formCategory, featured: formFeatured },
             formFile || undefined
         );
-        const updated = getGalleryItems();
+        const updated = await getGalleryItems();
         setItems(updated);
         toast.success(t("admin.toast.photoUpdated"));
       } else {
@@ -99,8 +105,8 @@ const AdminDashboard = () => {
         toast.success(t("admin.toast.photoAdded"));
       }
       resetForm();
-    } catch {
-      toast.error("Failed to save item");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Failed to save item");
     } finally {
       setSaving(false);
     }
@@ -111,8 +117,8 @@ const AdminDashboard = () => {
       await deleteGalleryItem(id);
       setItems((prev) => prev.filter((i) => i.id !== id));
       toast.success(t("admin.toast.photoDeleted"));
-    } catch {
-      toast.error("Failed to delete item");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Failed to delete item");
     }
   };
 
@@ -121,17 +127,25 @@ const AdminDashboard = () => {
     if (!name) return;
     if (categories.includes(name)) { toast.error(t("admin.toast.categoryExists")); return; }
     const updated = [...categories, name];
-    setCategories(updated);
-    saveCategories(updated);
-    setNewCategory("");
-    toast.success(t("admin.toast.categoryAdded"));
+    try {
+      setCategories(updated);
+      await saveCategories(updated);
+      setNewCategory("");
+      toast.success(t("admin.toast.categoryAdded"));
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Failed to save category");
+    }
   };
 
   const handleDeleteCategory = async (cat: string) => {
     const updated = categories.filter((c) => c !== cat);
-    setCategories(updated);
-    saveCategories(updated);
-    toast.success(t("admin.toast.categoryRemoved"));
+    try {
+      setCategories(updated);
+      await saveCategories(updated);
+      toast.success(t("admin.toast.categoryRemoved"));
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Failed to remove category");
+    }
   };
 
   const handleLogout = () => { logout(); navigate("/"); };
