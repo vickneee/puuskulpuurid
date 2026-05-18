@@ -8,7 +8,7 @@ interface HeroSectionProps {
 const HeroSection = ({ onViewGallery }: HeroSectionProps) => {
   const { t } = useLanguage();
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <div
         className="absolute inset-0 bg-cover bg-center brightness-55"
         style={{ backgroundImage: `url(${hero})` }}

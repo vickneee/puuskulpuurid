@@ -57,7 +57,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Navbar onNavigate={scrollTo} />
 
-      <div ref={heroRef} className={"py-16"}>
+      <div ref={heroRef} className={"pt-16"}>
         <HeroSection onViewGallery={() => scrollTo("gallery")} />
       </div>
 

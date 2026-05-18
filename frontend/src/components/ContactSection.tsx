@@ -48,7 +48,7 @@ const ContactSection = () => {
           />
           <button
             type="submit"
-            className="w-full py-3.5 rounded-lg bg-accent text-accent-foreground font-body font-semibold tracking-wide transition-all duration-300 hover:brightness-110"
+            className="w-full py-3.5 rounded-lg bg-accent text-white dark:text-white font-body font-semibold tracking-wide transition-all duration-300 hover:brightness-110"
           >
             {t("contact.form.send")}
           </button>
