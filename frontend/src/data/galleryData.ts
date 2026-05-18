@@ -6,6 +6,19 @@ import gallery5 from "@/assets/gallery-5.jpg";
 import gallery6 from "@/assets/gallery-6.jpg";
 import gallery7 from "@/assets/gallery-7.jpg";
 import gallery8 from "@/assets/gallery-8.jpg";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  type DocumentData,
+} from "firebase/firestore";
+import { deleteObject, getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { db, storage } from "@/lib/firebase";
+import { auth } from "@/lib/firebase";
 
 export interface GalleryItem {
   id: number;
@@ -14,6 +27,7 @@ export interface GalleryItem {
   description: string;
   category: string;
   featured?: boolean;
+  imagePath?: string;
 }
 
 const defaultItems: GalleryItem[] = [
@@ -27,70 +41,124 @@ const defaultItems: GalleryItem[] = [
   { id: 8, src: gallery8, title: "Artisan Coaster Set", description: "Set of four coasters made from different wood species, showcasing natural grain patterns.", category: "Tableware" },
 ];
 
-const STORAGE_KEY = "woodcraft_gallery";
-const CATEGORIES_KEY = "woodcraft_categories";
+const GALLERY_COLLECTION = "galleryItems";
+const SETTINGS_COLLECTION = "siteContent";
+const SETTINGS_DOC_ID = "gallery";
 
 const defaultCategories = ["Kitchen", "Tableware", "Decor", "Storage", "Lighting"];
 
-const readStorage = <T,>(key: string): T | null => {
-  const stored = localStorage.getItem(key);
-  if (!stored) return null;
-  try {
-    return JSON.parse(stored) as T;
-  } catch {
-    return null;
+const categoriesRef = doc(db, SETTINGS_COLLECTION, SETTINGS_DOC_ID);
+
+const toItem = (data: DocumentData): GalleryItem => ({
+  id: Number(data.id),
+  src: String(data.src),
+  title: String(data.title),
+  description: String(data.description),
+  category: String(data.category),
+  featured: Boolean(data.featured),
+  imagePath: typeof data.imagePath === "string" ? data.imagePath : undefined,
+});
+
+const fetchBlob = async (url: string) => {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch image asset: ${response.status}`);
   }
+  return response.blob();
 };
 
-const writeStorage = (key: string, value: unknown) => {
-  localStorage.setItem(key, JSON.stringify(value));
+const uploadImageFromSource = async (source: File | string, path: string) => {
+  const storageRef = ref(storage, path);
+  const blob = typeof source === "string" ? await fetchBlob(source) : source;
+  await uploadBytes(storageRef, blob);
+  return getDownloadURL(storageRef);
 };
 
-const fileToDataUrl = (file: File) =>
-  new Promise<string>((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result));
-    reader.onerror = () => reject(new Error("Failed to read image file"));
-    reader.readAsDataURL(file);
-  });
+const makeStoragePath = (id: number, name: string) => {
+  const cleanName = name.replace(/[^a-zA-Z0-9.\-_]/g, "-");
+  return `gallery/${id}-${cleanName}`;
+};
 
 const getNextId = (items: GalleryItem[]) =>
   items.reduce((max, item) => Math.max(max, item.id), 0) + 1;
 
-export function getCategories(): string[] {
-  const stored = readStorage<string[]>(CATEGORIES_KEY);
-  if (stored) return stored;
-  writeStorage(CATEGORIES_KEY, defaultCategories);
-  return defaultCategories;
+const isPermissionError = (error: unknown) =>
+  error instanceof Error && /(permission|cors|cross-origin)/i.test(error.message);
+
+const getFirebaseErrorCode = (error: unknown) => {
+  if (typeof error === "object" && error !== null && "code" in error) {
+    const code = (error as { code?: unknown }).code;
+    if (typeof code === "string") return code;
+  }
+  return null;
+};
+
+const isFirebasePermissionCode = (code: string | null) =>
+  code === "storage/unauthorized" || code === "permission-denied" || code === "firestore/permission-denied";
+
+const buildWriteErrorMessage = (error: unknown) => {
+  const code = getFirebaseErrorCode(error);
+  const uid = auth.currentUser?.uid ?? "none";
+
+  if (isFirebasePermissionCode(code)) {
+    return `Firebase denied the write (${code}). Signed-in uid: ${uid}. Confirm Storage/Firestore rules are published in the same project and bucket, then sign out/in and retry.`;
+  }
+
+  if (code === "storage/retry-limit-exceeded" || code === "storage/unknown" || isPermissionError(error)) {
+    return `Upload failed (${code ?? "unknown"}). This is often a bucket CORS or network/preflight issue. Signed-in uid: ${uid}. Verify Storage CORS on your active bucket and retry.`;
+  }
+
+  if (error instanceof Error) return error.message;
+  return "Failed to write to Firebase.";
+};
+
+const requireAdminUser = async () => {
+  const currentUser = auth.currentUser;
+  if (!currentUser) {
+    throw new Error("You must be signed in as an admin before saving content.");
+  }
+
+  // Force Firebase Auth to refresh/attach a current token before Storage or
+  // Firestore writes. This avoids a race where the dashboard opens before the
+  // SDK has fully hydrated the authenticated session.
+  await currentUser.getIdToken();
+};
+
+const withFriendlyWriteError = async <T,>(operation: () => Promise<T>) => {
+  try {
+    return await operation();
+  } catch (error) {
+    const message = buildWriteErrorMessage(error);
+    console.error("Firebase write error", {
+      code: getFirebaseErrorCode(error),
+      uid: auth.currentUser?.uid ?? null,
+      email: auth.currentUser?.email ?? null,
+      error,
+    });
+    throw new Error(message, { cause: error });
+  }
+};
+
+export async function getCategories(): Promise<string[]> {
+  const snapshot = await getDoc(categoriesRef).catch(() => null);
+  if (!snapshot || !snapshot.exists()) return defaultCategories;
+  const categories = snapshot.data()?.categories;
+  return Array.isArray(categories) && categories.every((cat) => typeof cat === "string")
+    ? categories
+    : defaultCategories;
 }
 
-export function saveCategories(categories: string[]) {
-  writeStorage(CATEGORIES_KEY, categories);
+export async function saveCategories(categories: string[]) {
+  await requireAdminUser();
+  await withFriendlyWriteError(() => setDoc(categoriesRef, { categories }, { merge: true }));
 }
 
-export function getGalleryItems(): GalleryItem[] {
-  const stored = readStorage<GalleryItem[]>(STORAGE_KEY);
-  if (stored) return stored;
-  writeStorage(STORAGE_KEY, defaultItems);
-  return defaultItems;
-}
-
-export function saveGalleryItems(items: GalleryItem[]) {
-  writeStorage(STORAGE_KEY, items);
-}
-
-export async function addGalleryItem(
-  file: File,
-  data: Omit<GalleryItem, "id" | "src">,
-): Promise<GalleryItem> {
-  const items = getGalleryItems();
-  const newItem: GalleryItem = {
-    id: getNextId(items),
-    src: await fileToDataUrl(file),
-    ...data,
-  };
-  saveGalleryItems([...items, newItem]);
-  return newItem;
+export async function getGalleryItems(): Promise<GalleryItem[]> {
+  const snapshot = await getDocs(query(collection(db, GALLERY_COLLECTION))).catch(() => null);
+  if (!snapshot || snapshot.empty) return defaultItems;
+  return snapshot.docs
+    .map((galleryDoc) => toItem(galleryDoc.data()))
+    .sort((a, b) => a.id - b.id);
 }
 
 export async function updateGalleryItem(
@@ -98,25 +166,62 @@ export async function updateGalleryItem(
   updates: Partial<Omit<GalleryItem, "id" | "src">>,
   file?: File,
 ): Promise<GalleryItem> {
-  const items = getGalleryItems();
-  const existing = items.find((item) => item.id === id);
+  const itemRef = doc(db, GALLERY_COLLECTION, String(id));
+  const snapshot = await getDoc(itemRef);
+  const existing = snapshot.exists() ? toItem(snapshot.data()) : null;
 
   if (!existing) {
     throw new Error("Gallery item not found");
   }
 
+  let src = existing.src;
+  let imagePath = existing.imagePath;
+  if (file) {
+    const nextPath = makeStoragePath(id, file.name);
+    await requireAdminUser();
+    src = await withFriendlyWriteError(() => uploadImageFromSource(file, nextPath));
+    imagePath = nextPath;
+    if (existing.imagePath) {
+      await deleteObject(ref(storage, existing.imagePath)).catch(() => {});
+    }
+  }
+
   const updatedItem: GalleryItem = {
     ...existing,
     ...updates,
-    src: file ? await fileToDataUrl(file) : existing.src,
+    src,
+    imagePath,
   };
 
-  saveGalleryItems(items.map((item) => (item.id === id ? updatedItem : item)));
+  await requireAdminUser();
+  await withFriendlyWriteError(() => setDoc(itemRef, updatedItem));
   return updatedItem;
 }
 
+export async function addGalleryItem(
+  file: File,
+  data: Omit<GalleryItem, "id" | "src">,
+): Promise<GalleryItem> {
+  await requireAdminUser();
+  const items = await getGalleryItems();
+  const id = getNextId(items);
+  const imagePath = makeStoragePath(id, file.name);
+  const src = await withFriendlyWriteError(() => uploadImageFromSource(file, imagePath));
+  const newItem: GalleryItem = { id, src, imagePath, ...data };
+  await withFriendlyWriteError(() => setDoc(doc(db, GALLERY_COLLECTION, String(id)), newItem));
+  return newItem;
+}
+
 export async function deleteGalleryItem(id: number) {
-  const items = getGalleryItems();
-  saveGalleryItems(items.filter((item) => item.id !== id));
+  await requireAdminUser();
+  const itemRef = doc(db, GALLERY_COLLECTION, String(id));
+  const snapshot = await getDoc(itemRef);
+  if (snapshot.exists()) {
+    const existing = toItem(snapshot.data());
+    if (existing.imagePath) {
+      await withFriendlyWriteError(() => deleteObject(ref(storage, existing.imagePath))).catch(() => {});
+    }
+    await withFriendlyWriteError(() => deleteDoc(itemRef));
+  }
 }
 

@@ -12,7 +12,7 @@ const FeaturedProjects = ({ items }: FeaturedProjectsProps) => {
   if (featured.length === 0) return null;
 
   return (
-    <section className="section-padding">
+    <section className="section-padding py-12">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-14">
           <span className="text-sm font-body font-semibold uppercase tracking-widest text-accent">
@@ -26,7 +26,7 @@ const FeaturedProjects = ({ items }: FeaturedProjectsProps) => {
               key={item.id}
               className="group rounded-lg overflow-hidden bg-card shadow-card hover-lift"
             >
-              <div className="overflow-hidden aspect-[4/3]">
+              <div className="overflow-hidden aspect-4/3">
                 <img
                   src={item.src}
                   alt={tItem(item.id, "title", item.title)}

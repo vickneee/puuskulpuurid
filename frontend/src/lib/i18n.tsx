@@ -81,7 +81,7 @@ const translations: Translations = {
     "admin.toast.categoryAdded": "Kategooria lisatud",
     "admin.toast.categoryRemoved": "Kategooria eemaldatud",
     // Categories
-    "cat.Persons": "Inimsed",
+    "cat.Persons": "Inimesed",
     "cat.Animals": "Loomad",
     "cat.Decor": "Dekoratsioon",
     "cat.Abstract": "Abstraktne",

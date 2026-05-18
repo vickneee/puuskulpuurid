@@ -12,26 +12,44 @@ import { useLanguage } from "@/lib/i18n";
 const Index = () => {
   const [items, setItems] = useState<GalleryItem[]>([]);
   const { t } = useLanguage();
+  const heroRef = useRef<HTMLDivElement>(null);
+  const galleryRef = useRef<HTMLDivElement>(null);
+  const aboutRef = useRef<HTMLDivElement>(null);
+  const featuredRef = useRef<HTMLDivElement>(null);
+  const contactRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setItems(getGalleryItems());
-    const handleStorage = () => setItems(getGalleryItems());
-    window.addEventListener("storage", handleStorage);
-    return () => window.removeEventListener("storage", handleStorage);
-  }, []);
+    let cancelled = false;
 
-  const sectionRefs = {
-    hero: useRef<HTMLDivElement>(null),
-    gallery: useRef<HTMLDivElement>(null),
-    about: useRef<HTMLDivElement>(null),
-    featured: useRef<HTMLDivElement>(null),
-    contact: useRef<HTMLDivElement>(null),
-  };
+    const loadItems = async () => {
+      try {
+        const fetched = await getGalleryItems();
+        if (!cancelled) setItems(fetched);
+      } catch {
+        if (!cancelled) setItems([]);
+      }
+    };
+
+    loadItems();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const scrollTo = useCallback((section: string) => {
-    const ref = sectionRefs[section as keyof typeof sectionRefs];
-    ref?.current?.scrollIntoView({ behavior: "smooth" });
-  }, []);
+    const targetRef =
+      section === "hero"
+        ? heroRef
+        : section === "gallery"
+          ? galleryRef
+          : section === "about"
+            ? aboutRef
+            : section === "featured"
+              ? featuredRef
+              : contactRef;
+
+    targetRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [aboutRef, contactRef, featuredRef, galleryRef, heroRef]);
 
   const featuredItems = items.filter((i) => i.featured);
 
@@ -39,15 +57,15 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Navbar onNavigate={scrollTo} />
 
-      <div ref={sectionRefs.hero} className={"py-16"}>
+      <div ref={heroRef} className={"py-16"}>
         <HeroSection onViewGallery={() => scrollTo("gallery")} />
       </div>
 
-      <div ref={sectionRefs.featured}>
+      <div ref={featuredRef}>
         <FeaturedProjects items={featuredItems} />
       </div>
 
-      <div ref={sectionRefs.gallery} className="section-padding">
+      <div ref={galleryRef} className="section-padding">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
             <span className="text-sm font-body font-semibold uppercase tracking-widest text-accent">
@@ -59,11 +77,11 @@ const Index = () => {
         </div>
       </div>
 
-      <div ref={sectionRefs.about}>
+      <div ref={aboutRef}>
         <AboutSection />
       </div>
 
-      <div ref={sectionRefs.contact}>
+      <div ref={contactRef}>
         <ContactSection />
       </div>
 
