@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useState, useLayoutEffect} from "react";
 import {Moon, Sun} from "lucide-react";
 // import {useLanguage, type Lang} from "@/lib/i18n";
 
@@ -16,19 +16,15 @@ const Navbar = ({onNavigate}: NavbarProps) => {
     //{code: "ru", label: "RU"},
     //];
 
-    const [isDark, setIsDark] = useState(() => {
-        const saved = localStorage.getItem("theme");
-        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-        const dark = saved ? saved === "dark" : prefersDark;
-        // Apply immediately on mount
-        document.documentElement.classList.toggle("dark", dark);
-        return dark;
-    });
+    const [isDark, setIsDark] = useState(false);
+
+    useLayoutEffect(() => {
+        document.documentElement.classList.toggle("dark", isDark);
+    }, [isDark]);
 
     const toggleTheme = () => {
         const next = !isDark;
         setIsDark(next);
-        document.documentElement.classList.toggle("dark", next);
         localStorage.setItem("theme", next ? "dark" : "light");
     };
 
@@ -41,7 +37,7 @@ const Navbar = ({onNavigate}: NavbarProps) => {
 
     return (
         <nav
-            className="fixed top-0 left-0 right-0 z-40 bg-[var(--background)] dark:bg-black/90 backdrop-blur-md border-b border-border/50">
+            className="fixed top-0 left-0 right-0 z-40 bg-background/80 backdrop-blur-md border-b border-border/50">
             <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
                 <button onClick={() => onNavigate("hero")}
                         className="font-display text-xl font-bold text-foreground hover:text-accent transition-colors">

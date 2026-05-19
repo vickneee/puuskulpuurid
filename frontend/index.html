@@ -9,6 +9,28 @@
     <!-- Instruct crawlers to index and follow by default -->
     <meta name="robots" content="index, follow" />
 
+    <!-- Inline theme preflight: read saved preference and set the document class before styles load
+         This ensures a user-selected light theme is respected even if the system prefers dark. -->
+    <script>
+      (function () {
+        try {
+          const theme = localStorage.getItem("theme");
+
+          if (
+                  theme === "dark" ||
+                  (!theme &&
+                          window.matchMedia("(prefers-color-scheme: dark)").matches)
+          ) {
+            document.documentElement.classList.add("dark");
+          } else {
+            document.documentElement.classList.remove("dark");
+          }
+        } catch (e) {
+          // ignore
+        }
+      })();
+    </script>
+
     <!-- Open Graph / Facebook -->
     <meta property="og:title" content="Puuskulptuurid" />
     <meta property="og:description" content="Puuskulptuurid — gallery of wooden sculptures showcasing featured projects, gallery images, and contact information." />
