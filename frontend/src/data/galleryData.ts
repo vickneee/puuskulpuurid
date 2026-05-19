@@ -254,4 +254,3 @@ export async function deleteGalleryItem(id: number) {
     await withFriendlyWriteError(() => deleteDoc(itemRef));
   }
 }
-
