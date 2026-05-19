@@ -1,0 +1,11 @@
+# robots.txt for Puuskulptuurid
+# This file tells web crawlers which parts of the site may be crawled.
+# Place this file in the site root (it's in frontend/public so Vite will serve it at /robots.txt).
+
+User-agent: *
+# Allow all except the paths below. Using Disallow with the specific path is widely supported.
+Disallow: /admin
+
+# If you have a sitemap, add its absolute URL below (replace with your production domain):
+Sitemap: https://your-production-domain.example/sitemap.xml
+
