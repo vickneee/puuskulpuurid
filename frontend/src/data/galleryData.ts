@@ -17,8 +17,7 @@ import {
   type DocumentData,
 } from "firebase/firestore";
 import { deleteObject, getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { db, storage } from "@/lib/firebase";
-import { auth } from "@/lib/firebase";
+import  { hasFirebase, db, storage, auth }  from "@/lib/firebase";
 
 export interface GalleryItem {
   id: number;
@@ -47,7 +46,9 @@ const SETTINGS_DOC_ID = "gallery";
 
 const defaultCategories = ["Kitchen", "Tableware", "Decor", "Storage", "Lighting"];
 
-const categoriesRef = doc(db, SETTINGS_COLLECTION, SETTINGS_DOC_ID);
+const categoriesRef = db
+    ? doc(db, SETTINGS_COLLECTION, SETTINGS_DOC_ID)
+    : null;
 
 const toItem = (data: DocumentData): GalleryItem => ({
   id: Number(data.id),
@@ -68,6 +69,9 @@ const fetchBlob = async (url: string) => {
 };
 
 const uploadImageFromSource = async (source: File | string, path: string) => {
+  if (!storage) {
+    throw new Error("Firebase Storage unavailable.");
+  }
   const storageRef = ref(storage, path);
   const blob = typeof source === "string" ? await fetchBlob(source) : source;
   await uploadBytes(storageRef, blob);
@@ -98,7 +102,7 @@ const isFirebasePermissionCode = (code: string | null) =>
 
 const buildWriteErrorMessage = (error: unknown) => {
   const code = getFirebaseErrorCode(error);
-  const uid = auth.currentUser?.uid ?? "none";
+  const uid = auth?.currentUser?.uid ?? "none";
 
   if (isFirebasePermissionCode(code)) {
     return `Firebase denied the write (${code}). Signed-in uid: ${uid}. Confirm Storage/Firestore rules are published in the same project and bucket, then sign out/in and retry.`;
@@ -113,7 +117,10 @@ const buildWriteErrorMessage = (error: unknown) => {
 };
 
 const requireAdminUser = async () => {
-  const currentUser = auth.currentUser;
+  if (!auth) {
+    throw new Error("Firebase auth unavailable.");
+  }
+  const currentUser = auth?.currentUser;
   if (!currentUser) {
     throw new Error("You must be signed in as an admin before saving content.");
   }
@@ -131,8 +138,8 @@ const withFriendlyWriteError = async <T,>(operation: () => Promise<T>) => {
     const message = buildWriteErrorMessage(error);
     console.error("Firebase write error", {
       code: getFirebaseErrorCode(error),
-      uid: auth.currentUser?.uid ?? null,
-      email: auth.currentUser?.email ?? null,
+      uid: auth?.currentUser?.uid ?? null,
+      email: auth?.currentUser?.email ?? null,
       error,
     });
     throw new Error(message, { cause: error });
@@ -140,8 +147,11 @@ const withFriendlyWriteError = async <T,>(operation: () => Promise<T>) => {
 };
 
 export async function getCategories(): Promise<string[]> {
-  const snapshot = await getDoc(categoriesRef).catch(() => null);
-  if (!snapshot || !snapshot.exists()) return defaultCategories;
+  if (!hasFirebase || !db || !categoriesRef) {
+    return defaultCategories;
+  }
+
+  const snapshot = await getDoc(categoriesRef).catch(() => null);  if (!snapshot || !snapshot.exists()) return defaultCategories;
   const categories = snapshot.data()?.categories;
   return Array.isArray(categories) && categories.every((cat) => typeof cat === "string")
     ? categories
@@ -149,11 +159,19 @@ export async function getCategories(): Promise<string[]> {
 }
 
 export async function saveCategories(categories: string[]) {
+  if (!hasFirebase || !db || !categoriesRef) {
+    throw new Error("Firebase disabled. Categories cannot be saved without a database connection.");
+  }
+
   await requireAdminUser();
-  await withFriendlyWriteError(() => setDoc(categoriesRef, { categories }, { merge: true }));
+  await withFriendlyWriteError(() => setDoc(categoriesRef!, { categories }, { merge: true }));
 }
 
 export async function getGalleryItems(): Promise<GalleryItem[]> {
+  if (!hasFirebase || !db) {
+    return defaultItems;
+  }
+
   const snapshot = await getDocs(query(collection(db, GALLERY_COLLECTION))).catch(() => null);
   if (!snapshot || snapshot.empty) return defaultItems;
   return snapshot.docs
@@ -166,7 +184,11 @@ export async function updateGalleryItem(
   updates: Partial<Omit<GalleryItem, "id" | "src">>,
   file?: File,
 ): Promise<GalleryItem> {
-  const itemRef = doc(db, GALLERY_COLLECTION, String(id));
+  if (!hasFirebase || !db) {
+    throw new Error("Firebase disabled. Gallery items cannot be edited without a database connection.");
+  }
+
+  const itemRef = doc(db!, GALLERY_COLLECTION, String(id));
   const snapshot = await getDoc(itemRef);
   const existing = snapshot.exists() ? toItem(snapshot.data()) : null;
 
@@ -182,7 +204,7 @@ export async function updateGalleryItem(
     src = await withFriendlyWriteError(() => uploadImageFromSource(file, nextPath));
     imagePath = nextPath;
     if (existing.imagePath) {
-      await deleteObject(ref(storage, existing.imagePath)).catch(() => {});
+      await deleteObject(ref(storage!, existing.imagePath)).catch(() => {});
     }
   }
 
@@ -202,24 +224,32 @@ export async function addGalleryItem(
   file: File,
   data: Omit<GalleryItem, "id" | "src">,
 ): Promise<GalleryItem> {
+  if (!hasFirebase || !db) {
+    throw new Error("Firebase disabled. New gallery items cannot be added without a database connection.");
+  }
+
   await requireAdminUser();
   const items = await getGalleryItems();
   const id = getNextId(items);
   const imagePath = makeStoragePath(id, file.name);
   const src = await withFriendlyWriteError(() => uploadImageFromSource(file, imagePath));
   const newItem: GalleryItem = { id, src, imagePath, ...data };
-  await withFriendlyWriteError(() => setDoc(doc(db, GALLERY_COLLECTION, String(id)), newItem));
+  await withFriendlyWriteError(() => setDoc(doc(db!, GALLERY_COLLECTION, String(id)), newItem));
   return newItem;
 }
 
 export async function deleteGalleryItem(id: number) {
+  if (!hasFirebase || !db) {
+    throw new Error("Firebase disabled. Gallery items cannot be deleted without a database connection.");
+  }
+
   await requireAdminUser();
-  const itemRef = doc(db, GALLERY_COLLECTION, String(id));
+  const itemRef = doc(db!, GALLERY_COLLECTION, String(id));
   const snapshot = await getDoc(itemRef);
   if (snapshot.exists()) {
     const existing = toItem(snapshot.data());
     if (existing.imagePath) {
-      await withFriendlyWriteError(() => deleteObject(ref(storage, existing.imagePath))).catch(() => {});
+      await withFriendlyWriteError(() => deleteObject(ref(storage!, existing.imagePath))).catch(() => {});
     }
     await withFriendlyWriteError(() => deleteDoc(itemRef));
   }

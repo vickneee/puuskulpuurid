@@ -24,6 +24,10 @@ const AdminLogin = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (authLoading) return;
+    if (!auth) {
+      setError("Firebase is not configured. Admin login is unavailable.");
+      return;
+    }
     setError("");
     setLoading(true);
     try {
