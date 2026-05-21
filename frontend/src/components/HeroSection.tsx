@@ -1,4 +1,4 @@
-import hero from "@/assets/hero.jpg";
+import hero from "@/assets/hero-new.jpg";
 import { useLanguage } from "@/lib/i18n";
 
 interface HeroSectionProps {
