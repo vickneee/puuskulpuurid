@@ -5,10 +5,13 @@ dist
 coverage
 *.log
 *.tsbuildinfo
-*.env
-*.env.local
-*.env.development
-*.env.test
-*.env.production
+.env
+.env.local
+.env.development
+.env.test
 .DS_Store
 .vscode
+
+# Allow production env file (Firebase API keys are meant to be public frontend variables)
+!frontend/.env.production
+
