@@ -1,5 +1,7 @@
+import { useState } from "react";
 import type { GalleryItem } from "@/data/galleryData";
 import { useLanguage } from "@/lib/i18n";
+import ImageModal from "./ImageModal";
 
 interface FeaturedProjectsProps {
   items?: GalleryItem[];
@@ -8,6 +10,13 @@ interface FeaturedProjectsProps {
 const FeaturedProjects = ({ items }: FeaturedProjectsProps) => {
   const { t, tCategory, tItem } = useLanguage();
   const featured = items && items.length > 0 ? items : [];
+  const [modalOpen, setModalOpen] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const openModal = (index: number) => {
+    setCurrentIndex(index);
+    setModalOpen(true);
+  };
 
   if (featured.length === 0) return null;
 
@@ -21,12 +30,20 @@ const FeaturedProjects = ({ items }: FeaturedProjectsProps) => {
           <h2 className="section-title mt-2">{t("featured.title")}</h2>
         </div>
         <div className="grid md:grid-cols-3 gap-8">
-          {featured.map((item) => (
+          {featured.map((item, idx) => (
             <div
               key={item.id}
               className="group rounded-lg overflow-hidden bg-card shadow-card hover-lift"
             >
-              <div className="overflow-hidden aspect-4/3">
+              <div
+                role="button"
+                tabIndex={0}
+                onClick={() => openModal(idx)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") openModal(idx);
+                }}
+                className="overflow-hidden aspect-4/3 cursor-pointer"
+              >
                 <img
                   src={item.src}
                   alt={tItem(item.id, "title", item.title)}
@@ -49,6 +66,13 @@ const FeaturedProjects = ({ items }: FeaturedProjectsProps) => {
           ))}
         </div>
       </div>
+      <ImageModal
+        items={featured}
+        currentIndex={currentIndex}
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onNavigate={setCurrentIndex}
+      />
     </section>
   );
 };
