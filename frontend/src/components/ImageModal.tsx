@@ -53,9 +53,9 @@ const ImageModal = ({ items, currentIndex, isOpen, onClose, onNavigate }: ImageM
 
   return (
     <div className="fixed inset-0 z-9999 flex items-center justify-center">
-      {/* Overlay */}
+      {/* Overlay: use page background so it follows light/dark theme (dark in dark mode) */}
       <div
-        className="absolute inset-0 bg-foreground/80 backdrop-blur-sm animate-zoom-in z-9000"
+        className="absolute inset-0 bg-background/80 backdrop-blur-sm animate-zoom-in z-9000"
         onClick={onClose}
       />
 
@@ -63,7 +63,7 @@ const ImageModal = ({ items, currentIndex, isOpen, onClose, onNavigate }: ImageM
       <button
         type="button"
         onClick={onClose}
-        className="absolute top-6 right-6 z-10000 p-3 rounded-full bg-card/20 text-primary-foreground hover:bg-card/40 transition-colors pointer-events-auto"
+        className="absolute top-6 right-6 z-10000 p-3 rounded-full bg-popover/10 text-popover-foreground hover:bg-popover/20 transition-colors pointer-events-auto"
         aria-label="Close image modal"
       >
         <X className="w-6 h-6" />
@@ -73,7 +73,7 @@ const ImageModal = ({ items, currentIndex, isOpen, onClose, onNavigate }: ImageM
       <button
         type="button"
         onClick={handlePrev}
-        className="hidden md:block absolute left-4 md:left-8 z-10000 p-2 rounded-full bg-card/20 text-primary-foreground hover:bg-card/40 transition-colors"
+        className="hidden md:block absolute left-4 md:left-8 z-10000 p-2 rounded-full bg-popover/10 text-popover-foreground hover:bg-popover/20 transition-colors"
       >
         <ChevronLeft className="w-7 h-7" />
       </button>
@@ -82,7 +82,7 @@ const ImageModal = ({ items, currentIndex, isOpen, onClose, onNavigate }: ImageM
       <button
         type="button"
         onClick={handleNext}
-        className="hidden md:block absolute right-4 md:right-8 z-10000 p-2 rounded-full bg-card/20 text-primary-foreground hover:bg-card/40 transition-colors"
+        className="hidden md:block absolute right-4 md:right-8 z-10000 p-2 rounded-full bg-popover/10 text-popover-foreground hover:bg-popover/20 transition-colors"
       >
         <ChevronRight className="w-7 h-7" />
       </button>
@@ -90,7 +90,8 @@ const ImageModal = ({ items, currentIndex, isOpen, onClose, onNavigate }: ImageM
       {/* Content */}
       <div className="relative z-10000 max-w-4xl w-full mx-4 animate-zoom-in">
         {/* Keep rounded corners but preserve the image's intrinsic size/ratio. */}
-        <div className="max-h-[70vh] overflow-hidden rounded-lg bg-transparent flex items-center justify-center">
+        {/* Use popover background so the sheet follows the theme (light in light mode, dark in dark mode) */}
+        <div className="max-h-[70vh] overflow-hidden rounded-lg bg-popover/95 flex items-center justify-center">
           <img
             src={item.src}
             alt={tItem(item.id, "title", item.title)}
@@ -98,10 +99,10 @@ const ImageModal = ({ items, currentIndex, isOpen, onClose, onNavigate }: ImageM
           />
         </div>
         <div className="mt-4 text-center">
-          <h3 className="font-display text-2xl font-semibold text-primary-foreground">
+          <h3 className="font-display text-2xl font-semibold text-popover-foreground">
             {tItem(item.id, "title", item.title)}
           </h3>
-          <p className="font-body text-primary-foreground/70 mt-1 max-w-lg mx-auto">
+          <p className="font-body text-popover-foreground/70 mt-1 max-w-lg mx-auto">
             {tItem(item.id, "description", item.description)}
           </p>
         </div>
