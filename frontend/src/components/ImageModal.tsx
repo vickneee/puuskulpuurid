@@ -73,7 +73,7 @@ const ImageModal = ({ items, currentIndex, isOpen, onClose, onNavigate }: ImageM
       <button
         type="button"
         onClick={handlePrev}
-        className="absolute left-4 md:left-8 z-10000 p-2 rounded-full bg-card/20 text-primary-foreground hover:bg-card/40 transition-colors"
+        className="hidden md:block absolute left-4 md:left-8 z-10000 p-2 rounded-full bg-card/20 text-primary-foreground hover:bg-card/40 transition-colors"
       >
         <ChevronLeft className="w-7 h-7" />
       </button>
@@ -82,18 +82,21 @@ const ImageModal = ({ items, currentIndex, isOpen, onClose, onNavigate }: ImageM
       <button
         type="button"
         onClick={handleNext}
-        className="absolute right-4 md:right-8 z-10000 p-2 rounded-full bg-card/20 text-primary-foreground hover:bg-card/40 transition-colors"
+        className="hidden md:block absolute right-4 md:right-8 z-10000 p-2 rounded-full bg-card/20 text-primary-foreground hover:bg-card/40 transition-colors"
       >
         <ChevronRight className="w-7 h-7" />
       </button>
 
       {/* Content */}
       <div className="relative z-10000 max-w-4xl w-full mx-4 animate-zoom-in">
-        <img
-          src={item.src}
-          alt={tItem(item.id, "title", item.title)}
-          className="w-full max-h-[70vh] object-contain rounded-lg"
-        />
+        {/* Keep rounded corners but preserve the image's intrinsic size/ratio. */}
+        <div className="max-h-[70vh] overflow-hidden rounded-lg bg-transparent flex items-center justify-center">
+          <img
+            src={item.src}
+            alt={tItem(item.id, "title", item.title)}
+            className="max-h-[70vh] max-w-[90vw] object-contain block"
+          />
+        </div>
         <div className="mt-4 text-center">
           <h3 className="font-display text-2xl font-semibold text-primary-foreground">
             {tItem(item.id, "title", item.title)}
