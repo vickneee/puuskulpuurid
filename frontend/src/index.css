@@ -228,3 +228,12 @@
             );
   }
 }
+
+/* Ensure navigation and modal SVG icons are not visually dimmed or blurred by backdrop/filters
+   and that they receive pointer events. This targets SVGs inside the header/nav and fixed modals. */
+nav svg, .fixed svg {
+  filter: none !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
