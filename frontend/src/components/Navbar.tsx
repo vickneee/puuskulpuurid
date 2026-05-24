@@ -123,7 +123,7 @@ const Navbar = ({onNavigate}: NavbarProps) => {
                     {/* centered popover sheet for menu items */}
                     <div className="relative z-9000 flex items-start justify-center pt-16 pointer-events-none">
                         <div
-                            className="w-full max-w-lg mx-4 bg-popover/97 text-popover-foreground rounded-xl px-6 py-8 flex flex-col items-center gap-6 z-10000 pointer-events-auto shadow-md"
+                            className="w-full max-w-lg mx-4 bg-popover/97 text-popover-foreground rounded-xl px-4 py-6 flex flex-col items-center gap-6 z-10000 pointer-events-auto shadow-md"
                             onClick={(e) => e.stopPropagation()}
                         >
                             {navItems.map((item) => (
@@ -134,7 +134,7 @@ const Navbar = ({onNavigate}: NavbarProps) => {
                                         onNavigate(item.id);
                                         setMobileOpen(false);
                                     }}
-                                    className="text-2xl font-medium text-popover-foreground hover:text-accent transition-colors pointer-events-auto"
+                                    className="text-xl font-medium text-popover-foreground hover:text-accent transition-colors pointer-events-auto"
                                 >
                                     {item.label}
                                 </button>
