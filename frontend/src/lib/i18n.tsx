@@ -28,6 +28,7 @@ const translations: Translations = {
     "about.title.l2": "kire poolt juhitud",
     "about.p1": "Üle 15-aastase kogemusega algab iga skulptuur hoolikalt valitud puidust ja sügavast lugupidamisest looduse vastu. Ühendan traditsioonilise puutööoskuse ja loomingulise käekirja, et luua tugevaid ja ajatuid puidust vorme.",
     "about.p2": "Iga teos kannab oma iseloomu — alates puidu struktuurist kuni käsitsi viimistletud detailideni. Ükski puuskulptuur ei ole täpselt teise sarnane, sest loodus ei korda end kunagi.",
+    "about.name": "Juri Vavulin",
     "about.imgAlt": "Meister LOODUSES",
     // Contact
     "contact.kicker": "Võta ühendust",
@@ -107,6 +108,7 @@ const translations: Translations = {
     "about.title.l2": "Driven by Passion",
     "about.p1": "With over 15 years of experience, every piece begins with carefully selected timber and a deep respect for the natural grain. Working from a small workshop, I combine traditional joinery techniques with modern design sensibilities to create objects that are both functional and beautiful.",
     "about.p2": "Each creation tells a story — from the species of wood chosen to the hand-applied finish. No two pieces are ever alike, because nature never repeats itself.",
+    "about.name": "Juri Vavulin",
     "about.imgAlt": "The craftsman at work",
     "contact.kicker": "Get in Touch",
     "contact.title": "Let's Create Together",
@@ -180,6 +182,7 @@ const translations: Translations = {
     "about.title.l2": "ведомо страстью",
     "about.p1": "Имея более 15 лет опыта, каждое изделие начинается с тщательно отобранной древесины и глубокого уважения к её природной фактуре. Работая в небольшой мастерской, я сочетаю традиционные столярные техники с современным дизайном, создавая предметы, одновременно функциональные и красивые.",
     "about.p2": "Каждое изделие рассказывает свою историю — от выбранной породы дерева до отделки, нанесённой вручную. Двух одинаковых работ не бывает, ведь природа никогда не повторяется.",
+    "about.name": "Juri Vavulin",
     "about.imgAlt": "Мастер за работой",
     "contact.kicker": "Связаться",
     "contact.title": "Создадим вместе",
