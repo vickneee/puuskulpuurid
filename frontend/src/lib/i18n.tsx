@@ -82,11 +82,12 @@ const translations: Translations = {
     "admin.toast.categoryAdded": "Kategooria lisatud",
     "admin.toast.categoryRemoved": "Kategooria eemaldatud",
     // Categories
-    "cat.Persons": "Inimesed",
-    "cat.Animals": "Loomad",
     "cat.Decor": "Dekoratsioon",
-    "cat.Abstract": "Abstraktne",
     "cat.Lighting": "Valgustus",
+    "cat.Animals": "Loomad",
+    "cat.Abstract": "Abstraktne",
+    "cat.Persons": "Inimesed",
+    "cat.Furniture": "Mööbel",
     // Theme
     "theme.toggle": "Vaheta teemat",
     "lang.label": "Keel",
@@ -157,11 +158,12 @@ const translations: Translations = {
     "admin.toast.categoryExists": "Category already exists",
     "admin.toast.categoryAdded": "Category added",
     "admin.toast.categoryRemoved": "Category removed",
-    "cat.Persons": "Persons",
-    "cat.Animals": "Animals",
     "cat.Decor": "Decor",
-    "cat.Abstract": "Abstract",
     "cat.Lighting": "Lighting",
+    "cat.Animals": "Animals",
+    "cat.Abstract": "Abstract",
+    "cat.Persons": "Persons",
+    "cat.Furniture": "Furniture",
     "theme.toggle": "Toggle theme",
     "lang.label": "Language",
   },
@@ -231,11 +233,12 @@ const translations: Translations = {
     "admin.toast.categoryExists": "Категория уже существует",
     "admin.toast.categoryAdded": "Категория добавлена",
     "admin.toast.categoryRemoved": "Категория удалена",
-    "cat.Persons": "Люди",
-    "cat.Animals": "Животные",
     "cat.Decor": "Декор",
-    "cat.Abstract": "Абстрактное",
     "cat.Lighting": "Освещение",
+    "cat.Animals": "Животные",
+    "cat.Abstract": "Абстрактное",
+    "cat.Persons": "Люди",
+    "cat.Furniture": "Мебель",
     "theme.toggle": "Сменить тему",
     "lang.label": "Язык",
   },
@@ -306,8 +309,11 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
 
   const t = useCallback((key: string) => translations[lang][key] ?? translations.et[key] ?? key, [lang]);
   const tCategory = useCallback(
-    (cat: string) => translations[lang][`cat.${cat}`] ?? cat,
-    [lang]
+      (cat: string) =>
+          translations[lang][`cat.${cat}`] ??
+          translations.et[`cat.${cat}`] ??
+          cat,
+      [lang]
   );
   const tItem = useCallback(
     (id: number, field: "title" | "description", fallback: string) =>

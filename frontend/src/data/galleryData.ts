@@ -30,21 +30,21 @@ export interface GalleryItem {
 }
 
 const defaultItems: GalleryItem[] = [
-  { id: 1, src: gallery1, title: "Walnut Cutting Board", description: "Hand-shaped cutting board crafted from premium walnut and maple wood with natural oil finish.", category: "Kitchen", featured: true },
-  { id: 2, src: gallery2, title: "Cherry Wood Bowl", description: "Elegant hand-turned bowl carved from a single piece of cherry wood with a silky smooth finish.", category: "Tableware", featured: true },
-  { id: 3, src: gallery3, title: "Reclaimed Wood Frame", description: "Rustic picture frame made from reclaimed barn wood, preserving the character of each plank.", category: "Decor" },
-  { id: 4, src: gallery4, title: "Olive Wood Spoon Set", description: "A set of hand-carved cooking spoons made from sustainably sourced olive wood.", category: "Kitchen", featured: true },
-  { id: 5, src: gallery5, title: "Walnut Jewelry Box", description: "Dovetail-jointed jewelry box in rich walnut with brass hardware and velvet lining.", category: "Storage" },
-  { id: 6, src: gallery6, title: "Oak Desk Lamp", description: "Minimalist desk lamp sculpted from solid oak with an integrated warm LED light.", category: "Lighting" },
-  { id: 7, src: gallery7, title: "Walnut Serving Tray", description: "Round serving tray with sculpted handles, finished with food-safe natural oils.", category: "Kitchen" },
-  { id: 8, src: gallery8, title: "Artisan Coaster Set", description: "Set of four coasters made from different wood species, showcasing natural grain patterns.", category: "Tableware" },
+  { id: 1, src: gallery1, title: "Faun 3m", description: "Käsitsi loodud Faun. Kõrgus 3 meetrit.", category: "Abstract", featured: true },
+  { id: 2, src: gallery2, title: "Põder", description: "Käsitsi loodud põder.", category: "Loomad", featured: true },
+  { id: 3, src: gallery3, title: "Koerad", description: "Käsitsi loodud koerad.", category: "Animals" },
+  { id: 4, src: gallery4, title: "Mulk", description: "Käsitsi nikerdatud Mulk.", category: "Persons", featured: true },
+  { id: 5, src: gallery5, title: "Tiiger", description: "Käsitsi loodud tiiger.", category: "Animals" },
+  { id: 6, src: gallery6, title: "Madu", description: "Käsitsi loodud madu. Kõrgus 8 meetrit.", category: "Animals" },
+  { id: 7, src: gallery7, title: "Ingel 3m", description: "Käsitsi loodud ingel. Üle 3 meetri kõrgune.", category: "Decor" },
+  { id: 8, src: gallery8, title: "Ajalooline mees", description: "Käsitsi loodud ajalooline mees.", category: "Persons" },
 ];
 
 const GALLERY_COLLECTION = "galleryItems";
 const SETTINGS_COLLECTION = "siteContent";
 const SETTINGS_DOC_ID = "gallery";
 
-const defaultCategories = ["Kitchen", "Tableware", "Decor", "Storage", "Lighting"];
+const defaultCategories = ["Decor", "Lighting", "Animal", "Abstract", "Persons", "Furniture"];
 
 const categoriesRef = db
     ? doc(db, SETTINGS_COLLECTION, SETTINGS_DOC_ID)
