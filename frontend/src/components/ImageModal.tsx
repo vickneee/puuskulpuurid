@@ -30,13 +30,24 @@ const ImageModal = ({ items, currentIndex, isOpen, onClose, onNavigate }: ImageM
     const previousPaddingRight = document.body.style.paddingRight;
     const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
 
+    // Push a dummy history entry so back button works
+    window.history.pushState({ modalOpen: true }, "");
+
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
       if (e.key === "ArrowLeft") handlePrev();
       if (e.key === "ArrowRight") handleNext();
     };
 
+    const handlePopState = (e: PopStateEvent) => {
+      // When back button is pressed, close the modal
+      if (e.state?.modalOpen === true) {
+        onClose();
+      }
+    };
+
     window.addEventListener("keydown", handleKey);
+    window.addEventListener("popstate", handlePopState);
     document.body.style.overflow = "hidden";
     if (scrollbarWidth > 0) {
       document.body.style.paddingRight = `${scrollbarWidth}px`;
@@ -44,6 +55,7 @@ const ImageModal = ({ items, currentIndex, isOpen, onClose, onNavigate }: ImageM
 
     return () => {
       window.removeEventListener("keydown", handleKey);
+      window.removeEventListener("popstate", handlePopState);
       document.body.style.overflow = previousOverflow;
       document.body.style.paddingRight = previousPaddingRight;
     };
