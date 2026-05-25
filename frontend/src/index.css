@@ -167,7 +167,7 @@
 @layer components {
   .section-padding {
     /* Reduced vertical padding on small screens to avoid large gaps before sections (gallery/contact) */
-    @apply px-6 py-12 md:py-20 md:px-12 lg:px-20 xl:px-32;
+    @apply px-6 py-8 md:py-16 md:px-12 lg:px-20 xl:px-32;
   }
 
   .section-title {
