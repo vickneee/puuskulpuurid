@@ -83,18 +83,37 @@ function ContactForm({ t }: { t: (k: string) => string }) {
         body: JSON.stringify({ name: name.trim(), email: email.trim(), message: message.trim() }),
       });
 
+      console.log(`[Contact Form] Response status: ${res.status}`);
+
       if (!res.ok) {
-        const text = await res.text().catch(() => "");
-        throw new Error(text || `Status ${res.status}`);
+        let errorMsg = `Status ${res.status}`;
+        try {
+          const json = await res.json();
+          errorMsg = json.error || JSON.stringify(json);
+          console.error("[Contact Form] Backend error:", json);
+        } catch {
+          const text = await res.text().catch(() => "");
+          errorMsg = text || errorMsg;
+          console.error("[Contact Form] Backend error (text):", text);
+        }
+        throw new Error(errorMsg);
       }
+
+      const responseData = await res.json().catch(() => ({}));
+      console.log("[Contact Form] Success:", responseData);
 
       toast({ title: t("contact.form.send"), description: "Message sent — thank you!", variant: "default" });
       setName("");
       setEmail("");
       setMessage("");
     } catch (err) {
-      console.error("Contact form error:", err);
-      toast({ title: t("contact.form.send"), description: "Failed to send message. Please try again later.", variant: "destructive" });
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      console.error("[Contact Form] Full error:", errorMessage);
+      toast({
+        title: t("contact.form.send"),
+        description: `Failed to send message: ${errorMessage}`,
+        variant: "destructive"
+      });
     } finally {
       setLoading(false);
     }
