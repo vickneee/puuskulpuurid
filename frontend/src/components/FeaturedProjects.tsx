@@ -21,7 +21,7 @@ const FeaturedProjects = ({ items }: FeaturedProjectsProps) => {
   if (featured.length === 0) return null;
 
   return (
-    <section className="section-padding pb-2 sm:pb-16">
+    <section className="section-padding pb-0 sm:pb-16">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-14">
           <span className="text-sm font-body font-semibold uppercase tracking-widest text-accent">
