@@ -27,7 +27,7 @@ const AboutSection = () => {
           <p className="font-body text-muted-foreground leading-relaxed">
             {t("about.p2")}
           </p>
-          <p className="font-display pt-3 text-foreground leading-relaxed">
+          <p className="font-display text-lg pt-3 text-foreground font-semibold leading-relaxed">
             {t("about.name")}
           </p>
         </div>
