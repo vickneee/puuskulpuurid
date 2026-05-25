@@ -69,7 +69,7 @@ const Navbar = ({onNavigate}: NavbarProps) => {
                     <div className="hidden sm:flex items-center gap-2">
                         {navItems.map((item) => (
                             <button key={item.id} onClick={() => onNavigate(item.id)}
-                                    className="font-body text-sm font-medium text-foreground hover:text-foreground transition-colors">
+                                    className="font-body text-sm font-medium text-foreground hover:text-accent transition-colors">
                                 {item.label}
                             </button>
                         ))}
@@ -105,7 +105,7 @@ const Navbar = ({onNavigate}: NavbarProps) => {
                     {/*</div>*/}
 
                     <button onClick={toggleTheme} aria-label={("theme.toggle")}
-                            className="p-2 rounded-md text-foreground hover:bg-muted transition-colors">
+                            className="p-2 rounded-md text-foreground hover:text-accent hover:bg-muted transition-colors">
                         {isDark ? <Sun className="w-4 h-4"/> : <Moon className="w-4 h-4"/>}
                     </button>
                 </div>
