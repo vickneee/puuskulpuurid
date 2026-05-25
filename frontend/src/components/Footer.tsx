@@ -18,7 +18,7 @@ const Footer = () => {
               rel="noopener noreferrer"
               aria-label="Facebook"
               title="Facebook"
-              className="flex items-center justify-center w-8 h-8 rounded-md text-accent hover:brightness-110 transition-colors"
+              className="flex items-center justify-center w-8 h-8 rounded-md text-accent hover:brightness-120 transition-colors"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor" aria-hidden>
               <path d="M22 12a10 10 0 10-11.5 9.9v-7h-2.2V12h2.2V9.8c0-2.2 1.3-3.4 3.2-3.4.9 0 1.9.2 1.9.2v2.1h-1.1c-1.1 0-1.5.7-1.5 1.4V12h2.6l-.4 2.9h-2.2v7A10 10 0 0022 12z" />
