@@ -166,11 +166,12 @@
 
 @layer components {
   .section-padding {
-    @apply px-6 py-20 md:px-12 lg:px-20 xl:px-32;
+    /* Reduced vertical padding on small screens to avoid large gaps before sections (gallery/contact) */
+    @apply px-6 py-10 md:py-16 md:px-12 lg:px-20 xl:px-32;
   }
 
   .section-title {
-    @apply text-3xl md:text-4xl lg:text-5xl font-semibold text-foreground;
+    @apply text-2xl md:text-4xl lg:text-5xl font-semibold text-foreground;
     font-family: var(--font-display), serif;
   }
 
@@ -228,3 +229,12 @@
             );
   }
 }
+
+/* Ensure navigation and modal SVG icons are not visually dimmed or blurred by backdrop/filters
+   and that they receive pointer events. This targets SVGs inside the header/nav and fixed modals. */
+nav svg, .fixed svg {
+  filter: none !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
