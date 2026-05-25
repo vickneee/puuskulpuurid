@@ -54,7 +54,7 @@ const Navbar = ({onNavigate}: NavbarProps) => {
             <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
                 <button type="button" onClick={() => onNavigate("hero")}
                         className="font-display text-xl font-bold text-foreground hover:text-accent transition-colors pointer-events-auto">
-                    Puuskulptuurid
+                    Puuskulptuur
                 </button>
                 <div className="flex items-center gap-4 sm:gap-6">
                     {/* mobile menu button */}

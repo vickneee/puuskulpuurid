@@ -13,7 +13,7 @@ const translations: Translations = {
     "nav.featured": "Esiletõstetud",
     "nav.contact": "Kontakt",
     // Hero
-    "hero.title": "Puuskulptuurid",
+    "hero.title": "Puuskulptuur",
     "hero.subtitle": "Käsitsi valmistatud puidust teosed, loodud kannatlikult, kirega ja austusega looduslike materjalide vastu.",
     "hero.cta": "Vaata galeriid",
     // Featured
