@@ -82,7 +82,7 @@ const ImageModal = ({ items, currentIndex, isOpen, onClose, onNavigate }: ImageM
       <button
         type="button"
         onClick={onClose}
-        className="absolute top-6 right-6 p-3 rounded-full bg-popover/10 text-popover-foreground hover:bg-popover/20 transition-colors pointer-events-auto"
+        className="absolute top-6 right-6 p-3 rounded-full bg-accent/40 text-popover-foreground hover:bg-accent/50 transition-colors pointer-events-auto"
         aria-label="Close image modal"
         style={{ zIndex: 10000000 }}
       >
