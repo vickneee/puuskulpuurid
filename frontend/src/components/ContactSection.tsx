@@ -4,7 +4,7 @@ import { useLanguage } from "@/lib/i18n";
 const ContactSection = () => {
   const { t } = useLanguage();
   return (
-    <section className="section-padding bg-card">
+    <section className="section-padding bg-card pt-6 sm:pt-16">
       <div className="max-w-4xl mx-auto text-center">
         <span className="text-sm font-body font-semibold uppercase tracking-widest text-accent">
           {t("contact.kicker")}
