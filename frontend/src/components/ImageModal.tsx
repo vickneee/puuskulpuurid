@@ -30,8 +30,15 @@ const ImageModal = ({ items, currentIndex, isOpen, onClose, onNavigate }: ImageM
     const previousPaddingRight = document.body.style.paddingRight;
     const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
 
-    // Push a dummy history entry so back button works
-    window.history.pushState({ modalOpen: true }, "");
+    // Push two history states so back button works correctly:
+    // 1. First, push a "base" state to anchor us to this page
+    // 2. Then push the modal state
+    // This way, back closes modal without leaving the page
+    if (window.history.length === 1) {
+      // If this is the first page load, push a base state first
+      window.history.pushState({ type: "pageBase" }, "");
+    }
+    window.history.pushState({ type: "modalOpen" }, "");
 
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -39,15 +46,14 @@ const ImageModal = ({ items, currentIndex, isOpen, onClose, onNavigate }: ImageM
       if (e.key === "ArrowRight") handleNext();
     };
 
-    const handlePopState = (e: PopStateEvent) => {
-      // When back button is pressed, close the modal
-      if (e.state?.modalOpen === true) {
-        onClose();
-      }
+    const handlePopState = () => {
+      // When popstate fires, we've gone back one entry
+      // If modal is currently open (which it is), close it
+      onClose();
     };
 
     window.addEventListener("keydown", handleKey);
-    window.addEventListener("popstate", handlePopState);
+    window.addEventListener("popstate", handlePopState, true);
     document.body.style.overflow = "hidden";
     if (scrollbarWidth > 0) {
       document.body.style.paddingRight = `${scrollbarWidth}px`;
@@ -55,7 +61,7 @@ const ImageModal = ({ items, currentIndex, isOpen, onClose, onNavigate }: ImageM
 
     return () => {
       window.removeEventListener("keydown", handleKey);
-      window.removeEventListener("popstate", handlePopState);
+      window.removeEventListener("popstate", handlePopState, true);
       document.body.style.overflow = previousOverflow;
       document.body.style.paddingRight = previousPaddingRight;
     };
@@ -64,19 +70,21 @@ const ImageModal = ({ items, currentIndex, isOpen, onClose, onNavigate }: ImageM
   if (!isOpen || !item) return null;
 
   return (
-    <div className="fixed inset-0 z-9999 flex items-center justify-center">
+    <div className="fixed inset-0 flex items-center justify-center" style={{ zIndex: 9999999 }}>
       {/* Overlay: use page background so it follows light/dark theme (dark in dark mode) */}
       <div
-        className="absolute inset-0 bg-background/80 backdrop-blur-sm animate-zoom-in z-9000"
+        className="absolute inset-0 bg-background/80 backdrop-blur-sm animate-zoom-in"
         onClick={onClose}
+        style={{ zIndex: 9999998 }}
       />
 
       {/* Close */}
       <button
         type="button"
         onClick={onClose}
-        className="absolute top-6 right-6 z-10000 p-3 rounded-full bg-popover/10 text-popover-foreground hover:bg-popover/20 transition-colors pointer-events-auto"
+        className="absolute top-6 right-6 p-3 rounded-full bg-popover/10 text-popover-foreground hover:bg-popover/20 transition-colors pointer-events-auto"
         aria-label="Close image modal"
+        style={{ zIndex: 10000000 }}
       >
         <X className="w-6 h-6" />
       </button>
@@ -85,7 +93,8 @@ const ImageModal = ({ items, currentIndex, isOpen, onClose, onNavigate }: ImageM
       <button
         type="button"
         onClick={handlePrev}
-        className="hidden md:block absolute left-4 md:left-8 z-10000 p-2 rounded-full bg-popover/10 text-popover-foreground hover:bg-popover/20 transition-colors"
+        className="hidden md:block absolute left-4 md:left-8 p-2 rounded-full bg-popover/10 text-popover-foreground hover:bg-popover/20 transition-colors"
+        style={{ zIndex: 9999999 }}
       >
         <ChevronLeft className="w-7 h-7" />
       </button>
@@ -94,13 +103,14 @@ const ImageModal = ({ items, currentIndex, isOpen, onClose, onNavigate }: ImageM
       <button
         type="button"
         onClick={handleNext}
-        className="hidden md:block absolute right-4 md:right-8 z-10000 p-2 rounded-full bg-popover/10 text-popover-foreground hover:bg-popover/20 transition-colors"
+        className="hidden md:block absolute right-4 md:right-8 p-2 rounded-full bg-popover/10 text-popover-foreground hover:bg-popover/20 transition-colors"
+        style={{ zIndex: 9999999 }}
       >
         <ChevronRight className="w-7 h-7" />
       </button>
 
       {/* Content */}
-      <div className="relative z-10000 max-w-4xl w-full mx-4 animate-zoom-in">
+      <div className="relative max-w-4xl w-full mx-4 animate-zoom-in" style={{ zIndex: 9999999 }}>
         {/* Keep rounded corners but preserve the image's intrinsic size/ratio. */}
         {/* Use popover background so the sheet follows the theme (light in light mode, dark in dark mode) */}
         <div className="max-h-[70vh] overflow-hidden rounded-lg bg-popover/95 flex items-center justify-center">
