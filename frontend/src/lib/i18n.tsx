@@ -22,6 +22,8 @@ const translations: Translations = {
         // Gallery
         "gallery.kicker": "Portfoolio",
         "gallery.title": "Kõik tööd",
+        "gallery.filter.label": "Kategooria",
+        "gallery.filter.all": "Kõik",
         // About
         "about.kicker": "Minust",
         "about.title.l1": "Käte all sündinud,",
@@ -105,6 +107,8 @@ const translations: Translations = {
         "featured.title": "Featured Projects",
         "gallery.kicker": "Portfolio",
         "gallery.title": "All Projects",
+        "gallery.filter.label": "Category",
+        "gallery.filter.all": "All",
         "about.kicker": "About the Craftsman",
         "about.title.l1": "Shaped by Hand,",
         "about.title.l2": "Driven by Passion",

@@ -11,7 +11,8 @@ import { useLanguage } from "@/lib/i18n";
 
 const Index = () => {
   const [items, setItems] = useState<GalleryItem[]>([]);
-  const { t } = useLanguage();
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const { t, tCategory } = useLanguage();
   const heroRef = useRef<HTMLDivElement>(null);
   const galleryRef = useRef<HTMLDivElement>(null);
   const aboutRef = useRef<HTMLDivElement>(null);
@@ -52,6 +53,17 @@ const Index = () => {
   }, [aboutRef, contactRef, featuredRef, galleryRef, heroRef]);
 
   const featuredItems = items.filter((i) => i.featured);
+  const categories = Array.from(new Set(items.map((item) => item.category))).sort((a, b) =>
+    tCategory(a).localeCompare(tCategory(b))
+  );
+  const activeCategory =
+    selectedCategory === "all" || categories.includes(selectedCategory)
+      ? selectedCategory
+      : "all";
+  const filteredItems =
+    activeCategory === "all"
+      ? items
+      : items.filter((item) => item.category === activeCategory);
 
   return (
     <div className="min-h-screen bg-background">
@@ -67,13 +79,30 @@ const Index = () => {
 
       <div ref={galleryRef} className="section-padding">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-14">
+          <div className="text-center mb-10">
             <span className="text-sm font-body font-semibold uppercase tracking-widest text-accent">
               {t("gallery.kicker")}
             </span>
             <h2 className="section-title mt-2">{t("gallery.title")}</h2>
           </div>
-          <GalleryGrid items={items} />
+          <div className="mb-8 flex justify-center">
+            <label className="flex items-center gap-3 font-body text-sm text-foreground">
+              <span>{t("gallery.filter.label")}:</span>
+              <select
+                value={activeCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="min-w-44 px-3 py-2 rounded-lg bg-card border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-accent"
+              >
+                <option value="all">{t("gallery.filter.all")}</option>
+                {categories.map((category) => (
+                  <option key={category} value={category}>
+                    {tCategory(category)}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+          <GalleryGrid items={filteredItems} />
         </div>
       </div>
 
