@@ -234,7 +234,7 @@ const AdminDashboard = () => {
 
                 <div className="space-y-3">
                   {items.map((item) => (
-                      <div key={item.id} className="flex items-center gap-4 p-4 rounded-lg bg-card border border-border hover:shadow-card transition-shadow">
+                      <div key={`${item.id}-${item.src}`} className="flex items-center gap-4 p-4 rounded-lg bg-card border border-border hover:shadow-card transition-shadow">
                         <img src={item.src} alt={item.title} className="w-16 h-16 rounded-md object-cover shrink-0" />
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">

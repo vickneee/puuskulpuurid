@@ -32,7 +32,7 @@ const FeaturedProjects = ({ items }: FeaturedProjectsProps) => {
         <div className="grid md:grid-cols-3 gap-8">
           {featured.map((item, idx) => (
             <div
-              key={item.id}
+              key={`${item.id}-${item.src}`}
               className="group rounded-lg overflow-hidden bg-card shadow-card hover-lift"
             >
               <div
