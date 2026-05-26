@@ -17,7 +17,7 @@ const ImageCard = ({ item, onClick }: ImageCardProps) => {
       <div className="overflow-hidden">
         <img
           src={item.src}
-          alt={tItem(item.id, "title", item.title)}
+          alt={tItem(item, "title", item.title)}
           className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-110 rounded-lg"
           loading="lazy"
         />
@@ -27,7 +27,7 @@ const ImageCard = ({ item, onClick }: ImageCardProps) => {
           {tCategory(item.category)}
         </span>
         <h3 className="font-display text-base font-semibold text-card-foreground mt-1">
-          {tItem(item.id, "title", item.title)}
+          {tItem(item, "title", item.title)}
         </h3>
       </div>
     </button>
