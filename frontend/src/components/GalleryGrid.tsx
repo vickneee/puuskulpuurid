@@ -20,7 +20,7 @@ const GalleryGrid = ({ items }: GalleryGridProps) => {
     <>
       <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-5 space-y-5">
         {items.map((item, index) => (
-          <div key={item.id} className="break-inside-avoid">
+          <div key={`${item.id}-${item.src}`} className="break-inside-avoid">
             <ImageCard item={item} onClick={() => openModal(index)} />
           </div>
         ))}
