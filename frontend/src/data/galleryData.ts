@@ -18,6 +18,7 @@ import gallery17 from "@/assets/gallery-17.jpg";
 import gallery18 from "@/assets/gallery-18.jpg";
 import gallery19 from "@/assets/gallery-19.jpg";
 import gallery20 from "@/assets/gallery-20.jpg";
+import gallery21 from "@/assets/gallery-21.jpg";
 import {
     collection,
     deleteDoc,
@@ -48,12 +49,12 @@ const defaultItems: GalleryItem[] = [
         src: gallery1,
         title: "Faun 3m",
         description: "Käsitsi loodud Faun. Kõrgus 3 meetrit.",
-        category: "Abstract",
+        category: "Characters",
         featured: true
     },
-    {id: 2, src: gallery2, title: "Põder", description: "Käsitsi loodud põder.", category: "Loomad", featured: true},
+    {id: 2, src: gallery2, title: "Põder", description: "Käsitsi loodud põder.", category: "Animals", featured: true},
     {id: 3, src: gallery3, title: "Koerad", description: "Käsitsi loodud koerad.", category: "Animals"},
-    {id: 4, src: gallery4, title: "Mulk", description: "Käsitsi nikerdatud Mulk.", category: "Persons", featured: true},
+    {id: 4, src: gallery4, title: "Mulk", description: "Käsitsi nikerdatud Mulk.", category: "Figures", featured: true},
     {id: 5, src: gallery5, title: "Tiiger", description: "Käsitsi loodud tiiger.", category: "Animals"},
     {id: 6, src: gallery6, title: "Madu", description: "Puidust madu. Kõrgus 8 meetrit.", category: "Animals"},
     {
@@ -68,10 +69,10 @@ const defaultItems: GalleryItem[] = [
         src: gallery8,
         title: "Ajalooline mees",
         description: "Käsitsi loodud ajalooline mees.",
-        category: "Persons"
+        category: "Figures"
     },
     {id: 9, src: gallery9, title: "Kobras", description: "Puidust kobras.", category: "Animals"},
-    {id: 10, src: gallery10, title: "Ahv", description: "Meisterdatud ahv.", category: "Animals"},
+    {id: 10, src: gallery10, title: "Aia dekoratsioon", description: "Aia dekoratsioon.", category: "Decor"},
     {id: 11, src: gallery11, title: "Otepää künkad", description: "Otepää künkad.", category: "Decor"},
     {id: 12, src: gallery12, title: "Voodi", description: "Öökullidega voodi.", category: "Furniture"},
     {id: 13, src: gallery13, title: "Öökullid", description: "Öökullid.", category: "Animals"},
@@ -82,13 +83,14 @@ const defaultItems: GalleryItem[] = [
     {id: 18, src: gallery18, title: "Koer", description: "Koer.", category: "Animals"},
     {id: 19, src: gallery19, title: "Sarikas", description: "Sarikas.", category: "Decor"},
     {id: 20, src: gallery20, title: "Koer", description: "Koer.", category: "Animals"},
+    {id: 21, src: gallery21, title: "Voodi hirvega", description: "Voodi hirve ja põdraga.", category: "Furniture"},
 ];
 
 const GALLERY_COLLECTION = "galleryItems";
 const SETTINGS_COLLECTION = "siteContent";
 const SETTINGS_DOC_ID = "gallery";
 
-const defaultCategories = ["Decor", "Lighting", "Animal", "Abstract", "Persons", "Furniture"];
+const defaultCategories = ["Animals", "Characters", "Decor", "Figures", "Furniture"];
 
 const categoriesRef = db
     ? doc(db, SETTINGS_COLLECTION, SETTINGS_DOC_ID)
