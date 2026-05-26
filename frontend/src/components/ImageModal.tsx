@@ -116,16 +116,16 @@ const ImageModal = ({ items, currentIndex, isOpen, onClose, onNavigate }: ImageM
         <div className="max-h-[70vh] overflow-hidden rounded-lg bg-popover/95 flex items-center justify-center">
           <img
             src={item.src}
-            alt={tItem(item.id, "title", item.title)}
+            alt={tItem(item, "title", item.title)}
             className="max-h-[70vh] max-w-[90vw] object-contain block"
           />
         </div>
         <div className="mt-4 text-center">
           <h3 className="font-display text-2xl font-semibold text-popover-foreground">
-            {tItem(item.id, "title", item.title)}
+            {tItem(item, "title", item.title)}
           </h3>
           <p className="font-body text-popover-foreground/70 mt-1 max-w-lg mx-auto">
-            {tItem(item.id, "description", item.description)}
+            {tItem(item, "description", item.description)}
           </p>
         </div>
       </div>

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAdmin } from "@/contexts/useAdmin";
 import {
   getGalleryItems, addGalleryItem, updateGalleryItem,
-  deleteGalleryItem, getCategories, saveCategories, type GalleryItem
+  deleteGalleryItem, getCategoryEntries, saveCategoryEntries, type GalleryItem, type CategoryEntry
 } from "@/data/galleryData";
 import { Plus, Pencil, Trash2, LogOut, Tag, Image, ArrowLeft, X, Star } from "lucide-react";
 import { toast } from "sonner";
@@ -14,16 +14,20 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   const { t, tCategory } = useLanguage();
   const [items, setItems] = useState<GalleryItem[]>([]);
-  const [categories, setCategories] = useState<string[]>([]);
+  const [categories, setCategories] = useState<CategoryEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [tab, setTab] = useState<"photos" | "categories">("photos");
   const [editingItem, setEditingItem] = useState<GalleryItem | null>(null);
   const [showForm, setShowForm] = useState(false);
-  const [newCategory, setNewCategory] = useState("");
+  const [newCategoryEt, setNewCategoryEt] = useState("");
+  const [newCategoryEn, setNewCategoryEn] = useState("");
+  const [editingCategoryKey, setEditingCategoryKey] = useState<string | null>(null);
 
-  const [formTitle, setFormTitle] = useState("");
-  const [formDesc, setFormDesc] = useState("");
+  const [formTitleEt, setFormTitleEt] = useState("");
+  const [formTitleEn, setFormTitleEn] = useState("");
+  const [formDescEt, setFormDescEt] = useState("");
+  const [formDescEn, setFormDescEn] = useState("");
   const [formCategory, setFormCategory] = useState("");
   const [formFile, setFormFile] = useState<File | null>(null);
   const [formImageUrl, setFormImageUrl] = useState("");
@@ -38,7 +42,7 @@ const AdminDashboard = () => {
       try {
         const [fetchedItems, fetchedCats] = await Promise.all([
           getGalleryItems(),
-          getCategories(),
+          getCategoryEntries(),
         ]);
         if (cancelled) return;
         setItems(fetchedItems);
@@ -56,21 +60,23 @@ const AdminDashboard = () => {
   }, [authLoading, isAdmin, navigate]);
 
   const resetForm = () => {
-    setFormTitle(""); setFormDesc(""); setFormCategory("");
+    setFormTitleEt(""); setFormTitleEn(""); setFormDescEt(""); setFormDescEn(""); setFormCategory("");
     setFormFile(null); setFormImageUrl(""); setFormFeatured(false);
     setEditingItem(null); setShowForm(false);
   };
 
   const openAddForm = () => {
     resetForm();
-    setFormCategory(categories[0] || "");
+    setFormCategory(categories[0]?.key || "");
     setShowForm(true);
   };
 
   const openEditForm = (item: GalleryItem) => {
     setEditingItem(item);
-    setFormTitle(item.title);
-    setFormDesc(item.description);
+    setFormTitleEt(item.titleEt ?? item.title);
+    setFormTitleEn(item.titleEn ?? item.title);
+    setFormDescEt(item.descriptionEt ?? item.description);
+    setFormDescEn(item.descriptionEn ?? item.description);
     setFormCategory(item.category);
     setFormImageUrl(item.src);
     setFormFeatured(!!item.featured);
@@ -78,7 +84,12 @@ const AdminDashboard = () => {
   };
 
   const handleSaveItem = async () => {
-    if (!formTitle.trim() || !formCategory.trim()) {
+    const titleEt = formTitleEt.trim();
+    const titleEn = formTitleEn.trim() || titleEt;
+    const descriptionEt = formDescEt.trim();
+    const descriptionEn = formDescEn.trim() || descriptionEt;
+
+    if (!titleEt || !formCategory.trim()) {
       toast.error(t("admin.toast.titleCategoryRequired"));
       return;
     }
@@ -87,7 +98,16 @@ const AdminDashboard = () => {
       if (editingItem) {
         await updateGalleryItem(
             editingItem.id,
-            { title: formTitle, description: formDesc, category: formCategory, featured: formFeatured },
+            {
+              title: titleEt,
+              description: descriptionEt,
+              titleEt,
+              titleEn,
+              descriptionEt,
+              descriptionEn,
+              category: formCategory,
+              featured: formFeatured,
+            },
             formFile || undefined
         );
         const updated = await getGalleryItems();
@@ -96,8 +116,12 @@ const AdminDashboard = () => {
       } else {
         if (!formFile) { toast.error("Please select an image"); setSaving(false); return; }
         const newItem = await addGalleryItem(formFile, {
-          title: formTitle,
-          description: formDesc,
+          title: titleEt,
+          description: descriptionEt,
+          titleEt,
+          titleEn,
+          descriptionEt,
+          descriptionEn,
           category: formCategory,
           featured: formFeatured,
         });
@@ -123,25 +147,44 @@ const AdminDashboard = () => {
   };
 
   const handleAddCategory = async () => {
-    const name = newCategory.trim();
-    if (!name) return;
-    if (categories.includes(name)) { toast.error(t("admin.toast.categoryExists")); return; }
-    const updated = [...categories, name];
+    const titleEt = newCategoryEt.trim();
+    const titleEn = newCategoryEn.trim();
+    const key = editingCategoryKey ?? (titleEn || titleEt);
+    if (!titleEt || !titleEn) return;
+    if (!editingCategoryKey && categories.some((cat) => cat.key === key)) { toast.error(t("admin.toast.categoryExists")); return; }
+    const updated = editingCategoryKey
+      ? categories.map((cat) => cat.key === editingCategoryKey ? { ...cat, titleEt, titleEn } : cat)
+      : [...categories, { key, titleEt, titleEn }];
     try {
       setCategories(updated);
-      await saveCategories(updated);
-      setNewCategory("");
-      toast.success(t("admin.toast.categoryAdded"));
+      await saveCategoryEntries(updated);
+      setNewCategoryEt("");
+      setNewCategoryEn("");
+      setEditingCategoryKey(null);
+      toast.success(editingCategoryKey ? t("admin.toast.categoryUpdated") : t("admin.toast.categoryAdded"));
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Failed to save category");
     }
   };
 
-  const handleDeleteCategory = async (cat: string) => {
-    const updated = categories.filter((c) => c !== cat);
+  const handleEditCategory = (cat: CategoryEntry) => {
+    setEditingCategoryKey(cat.key);
+    setNewCategoryEt(cat.titleEt);
+    setNewCategoryEn(cat.titleEn);
+    setTab("categories");
+  };
+
+  const handleCancelCategoryEdit = () => {
+    setEditingCategoryKey(null);
+    setNewCategoryEt("");
+    setNewCategoryEn("");
+  };
+
+  const handleDeleteCategory = async (catKey: string) => {
+    const updated = categories.filter((c) => c.key !== catKey);
     try {
       setCategories(updated);
-      await saveCategories(updated);
+      await saveCategoryEntries(updated);
       toast.success(t("admin.toast.categoryRemoved"));
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Failed to remove category");
@@ -198,22 +241,26 @@ const AdminDashboard = () => {
                         <button onClick={resetForm} className="text-muted-foreground hover:text-foreground"><X className="w-5 h-5" /></button>
                       </div>
                       <div className="grid sm:grid-cols-2 gap-4">
-                        <input value={formTitle} onChange={(e) => setFormTitle(e.target.value)} placeholder={t("admin.dash.form.title")}
+                        <input value={formTitleEt} onChange={(e) => setFormTitleEt(e.target.value)} placeholder={t("admin.dash.form.titleEt")}
+                               className="w-full px-4 py-2.5 rounded-lg bg-background border border-border font-body text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent text-sm" />
+                        <input value={formTitleEn} onChange={(e) => setFormTitleEn(e.target.value)} placeholder={t("admin.dash.form.titleEn")}
                                className="w-full px-4 py-2.5 rounded-lg bg-background border border-border font-body text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent text-sm" />
                         <select value={formCategory} onChange={(e) => setFormCategory(e.target.value)}
                                 className="w-full px-4 py-2.5 rounded-lg bg-background border border-border font-body text-foreground focus:outline-none focus:ring-2 focus:ring-accent text-sm">
-                          {categories.map((c) => <option key={c} value={c}>{tCategory(c)}</option>)}
+                          {categories.map((c) => <option key={c.key} value={c.key}>{tCategory(c.key)}</option>)}
                         </select>
                         <div className="sm:col-span-2">
                           <input type="file" accept="image/*" onChange={(e) => setFormFile(e.target.files?.[0] || null)}
                                  className="w-full px-4 py-2.5 rounded-lg bg-background border border-border font-body text-foreground text-sm" />
                           {(formFile || formImageUrl) && (
                               <img src={formFile ? URL.createObjectURL(formFile) : formImageUrl}
-                                   alt={formTitle || "Preview image"}
+                                   alt={formTitleEt || "Preview image"}
                                    className="mt-2 w-full h-40 object-cover rounded-lg" />
                           )}
                         </div>
-                        <textarea value={formDesc} onChange={(e) => setFormDesc(e.target.value)} placeholder={t("admin.dash.form.description")} rows={3}
+                        <textarea value={formDescEt} onChange={(e) => setFormDescEt(e.target.value)} placeholder={t("admin.dash.form.descriptionEt")} rows={3}
+                                  className="w-full px-4 py-2.5 rounded-lg bg-background border border-border font-body text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent text-sm sm:col-span-2 resize-none" />
+                        <textarea value={formDescEn} onChange={(e) => setFormDescEn(e.target.value)} placeholder={t("admin.dash.form.descriptionEn")} rows={3}
                                   className="w-full px-4 py-2.5 rounded-lg bg-background border border-border font-body text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent text-sm sm:col-span-2 resize-none" />
                         <label className="flex items-center gap-2 font-body text-sm text-foreground sm:col-span-2">
                           <input type="checkbox" checked={formFeatured} onChange={(e) => setFormFeatured(e.target.checked)} className="w-4 h-4 rounded border-border accent-accent" />
@@ -263,26 +310,42 @@ const AdminDashboard = () => {
               <div>
                 <h2 className="font-display text-lg font-semibold text-foreground mb-6">{t("admin.dash.categories.manage")}</h2>
                 <div className="flex gap-3 mb-6">
-                  <input value={newCategory} onChange={(e) => setNewCategory(e.target.value)} placeholder={t("admin.dash.categories.new")}
+                  <input value={newCategoryEt} onChange={(e) => setNewCategoryEt(e.target.value)} placeholder={t("admin.dash.categories.newEt")}
+                         onKeyDown={(e) => e.key === "Enter" && handleAddCategory()}
+                         className="flex-1 px-4 py-2.5 rounded-lg bg-card border border-border font-body text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent text-sm" />
+                  <input value={newCategoryEn} onChange={(e) => setNewCategoryEn(e.target.value)} placeholder={t("admin.dash.categories.newEn")}
                          onKeyDown={(e) => e.key === "Enter" && handleAddCategory()}
                          className="flex-1 px-4 py-2.5 rounded-lg bg-card border border-border font-body text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent text-sm" />
                   <button onClick={handleAddCategory} className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-accent text-accent-foreground font-body text-sm font-semibold hover:brightness-110 transition-all">
-                    <Plus className="w-4 h-4" /> {t("admin.dash.categories.add")}
+                    <Plus className="w-4 h-4" /> {editingCategoryKey ? t("admin.dash.categories.update") : t("admin.dash.categories.add")}
                   </button>
+                  {editingCategoryKey && (
+                    <button onClick={handleCancelCategoryEdit} className="px-5 py-2.5 rounded-lg bg-secondary text-secondary-foreground font-body text-sm font-medium hover:brightness-95 transition-all">
+                      {t("admin.dash.categories.cancel")}
+                    </button>
+                  )}
                 </div>
                 <div className="space-y-2">
                   {categories.map((cat) => {
-                    const count = items.filter((i) => i.category === cat).length;
+                    const count = items.filter((i) => i.category === cat.key).length;
                     return (
-                        <div key={cat} className="flex items-center justify-between p-4 rounded-lg bg-card border border-border">
+                        <div key={cat.key} className="flex items-center justify-between p-4 rounded-lg bg-card border border-border">
                           <div className="flex items-center gap-3">
                             <Tag className="w-4 h-4 text-accent" />
-                            <span className="font-body text-sm font-medium text-foreground">{tCategory(cat)}</span>
+                            <div className="flex flex-col">
+                              <span className="font-body text-sm font-medium text-foreground">{cat.titleEn}</span>
+                              <span className="font-body text-xs text-muted-foreground">{cat.titleEt}</span>
+                            </div>
                             <span className="font-body text-xs text-muted-foreground">({count} {t("admin.dash.categories.count")})</span>
                           </div>
-                          <button onClick={() => handleDeleteCategory(cat)} className="p-2 rounded-lg bg-destructive/10 text-destructive hover:bg-destructive/20 transition-all">
-                            <Trash2 className="w-4 h-4" />
-                          </button>
+                          <div className="flex gap-2">
+                            <button onClick={() => handleEditCategory(cat)} className="p-2 rounded-lg bg-secondary text-secondary-foreground hover:brightness-95 transition-all" aria-label={t("admin.dash.categories.edit")}>
+                              <Pencil className="w-4 h-4" />
+                            </button>
+                            <button onClick={() => handleDeleteCategory(cat.key)} className="p-2 rounded-lg bg-destructive/10 text-destructive hover:bg-destructive/20 transition-all">
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
                         </div>
                     );
                   })}

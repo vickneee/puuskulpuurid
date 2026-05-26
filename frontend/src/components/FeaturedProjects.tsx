@@ -46,7 +46,7 @@ const FeaturedProjects = ({ items }: FeaturedProjectsProps) => {
               >
                 <img
                   src={item.src}
-                  alt={tItem(item.id, "title", item.title)}
+                  alt={tItem(item, "title", item.title)}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   loading="lazy"
                 />
@@ -56,10 +56,10 @@ const FeaturedProjects = ({ items }: FeaturedProjectsProps) => {
                   {tCategory(item.category)}
                 </span>
                 <h3 className="font-display text-xl font-semibold text-card-foreground mt-1 mb-2">
-                  {tItem(item.id, "title", item.title)}
+                  {tItem(item, "title", item.title)}
                 </h3>
                 <p className="font-body text-sm text-muted-foreground leading-relaxed">
-                  {tItem(item.id, "description", item.description)}
+                  {tItem(item, "description", item.description)}
                 </p>
               </div>
             </div>

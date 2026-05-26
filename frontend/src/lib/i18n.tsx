@@ -1,4 +1,5 @@
 import {createContext, useCallback, useContext, useEffect, useState, type ReactNode} from "react";
+import type { GalleryItem } from "@/data/galleryData";
 
 export type Lang = "et" | "en";
 
@@ -66,8 +67,12 @@ const translations: Translations = {
         "admin.dash.photos.edit": "Muuda toodet",
         "admin.dash.photos.new": "Uus toode",
         "admin.dash.form.title": "Pealkiri *",
+        "admin.dash.form.titleEt": "Pealkiri (ET) *",
+        "admin.dash.form.titleEn": "Pealkiri (EN)",
         "admin.dash.form.imageUrl": "Pildi URL (kleebi link)",
         "admin.dash.form.description": "Kirjeldus",
+        "admin.dash.form.descriptionEt": "Kirjeldus (ET) *",
+        "admin.dash.form.descriptionEn": "Kirjeldus (EN)",
         "admin.dash.form.featured": "Esiletõstetud projekt",
         "admin.dash.form.update": "Uuenda",
         "admin.dash.form.save": "Lisa toode",
@@ -75,7 +80,12 @@ const translations: Translations = {
         "admin.dash.empty": "Tooteidd pole veel. Lisa esimene!",
         "admin.dash.categories.manage": "Halda kategooriaid",
         "admin.dash.categories.new": "Uue kategooria nimi",
+        "admin.dash.categories.newEt": "Uus kategooria (ET)",
+        "admin.dash.categories.newEn": "Uus kategooria (EN)",
         "admin.dash.categories.add": "Lisa",
+        "admin.dash.categories.edit": "Muuda kategooriat",
+        "admin.dash.categories.update": "Uuenda kategooriat",
+        "admin.dash.categories.cancel": "Tühista",
         "admin.dash.categories.count": "toodet",
         "admin.toast.titleCategoryRequired": "Pealkiri ja kategooria on kohustuslikud",
         "admin.toast.photoUpdated": "Toode uuendatud",
@@ -83,6 +93,7 @@ const translations: Translations = {
         "admin.toast.photoDeleted": "Toode kustutatud",
         "admin.toast.categoryExists": "Kategooria on juba olemas",
         "admin.toast.categoryAdded": "Kategooria lisatud",
+        "admin.toast.categoryUpdated": "Kategooria uuendatud",
         "admin.toast.categoryRemoved": "Kategooria eemaldatud",
         // Categories
         "cat.Decor": "Dekoratsioon",
@@ -145,8 +156,12 @@ const translations: Translations = {
         "admin.dash.photos.edit": "Edit Item",
         "admin.dash.photos.new": "Add New Item",
         "admin.dash.form.title": "Title *",
+        "admin.dash.form.titleEt": "Title (ET) *",
+        "admin.dash.form.titleEn": "Title (EN)",
         "admin.dash.form.imageUrl": "Image URL (paste link)",
         "admin.dash.form.description": "Description",
+        "admin.dash.form.descriptionEt": "Description (ET) *",
+        "admin.dash.form.descriptionEn": "Description (EN)",
         "admin.dash.form.featured": "Featured project",
         "admin.dash.form.update": "Update",
         "admin.dash.form.save": "Add Item",
@@ -154,7 +169,12 @@ const translations: Translations = {
         "admin.dash.empty": "No items yet. Add your first one!",
         "admin.dash.categories.manage": "Manage Categories",
         "admin.dash.categories.new": "New category name",
+        "admin.dash.categories.newEt": "New category (ET)",
+        "admin.dash.categories.newEn": "New category (EN)",
         "admin.dash.categories.add": "Add",
+        "admin.dash.categories.edit": "Edit category",
+        "admin.dash.categories.update": "Update category",
+        "admin.dash.categories.cancel": "Cancel",
         "admin.dash.categories.count": "items",
         "admin.toast.titleCategoryRequired": "Title and category are required",
         "admin.toast.photoUpdated": "Item updated",
@@ -162,6 +182,7 @@ const translations: Translations = {
         "admin.toast.photoDeleted": "Item deleted",
         "admin.toast.categoryExists": "Category already exists",
         "admin.toast.categoryAdded": "Category added",
+        "admin.toast.categoryUpdated": "Category updated",
         "admin.toast.categoryRemoved": "Category removed",
         "cat.Decor": "Decor",
         "cat.Animals": "Animals",
@@ -189,7 +210,7 @@ const itemTranslations: Record<Lang, ItemDict> = {
         10: {title: "Aia dekoratsioon", description: "Aia dekoratsioon."},
         11: {title: "Otepää künkad 3m", description: "Otepää künkad. Üle 3 meetri kõrgune."},
         12: {title: "Voodi öökullidega", description: "Öökullidega puidust voodi."},
-        13: {title: "Öökullid", description: "Ökullid."},
+        13: {title: "Öökullid", description: "Kolm öökulli."},
         14: {title: "Merineitsi", description: "Merineitsi."},
         15: {title: "Sarikas", description: "Sarikas."},
         16: {title: "Voodi karudega", description: "Karudega puidust voodi."},
@@ -198,6 +219,12 @@ const itemTranslations: Record<Lang, ItemDict> = {
         19: {title: "Sarikas", description: "Sarikas."},
         20: {title: "Koer", description: "Koer."},
         21: {title: "Voodi hirvega", description: "Voodi hirve ja põdraga."},
+        22: {title: "Voodi hirvega otsevaade", description: "Voodi hirve ja põdraga otsevaade."},
+        23: {title: "Troll 6m", description: "Troll. Umbes 6 meetri kõrgune."},
+        24: {title: "Buratiino", description: "Buratiino."},
+        25: {title: "Ludwig van Beethoven", description: "Ludwig van Beethoven."},
+        26: {title: "Oinas", description: "Oinas."},
+        27: {title: "Voodi madudega", description: "Oinas."},
     },
     en: {
         1: {title: "Faun 3m", description: "Hand-carved Faun. Height 3 meters."},
@@ -220,7 +247,13 @@ const itemTranslations: Record<Lang, ItemDict> = {
         18: {title: "Dog", description: "Dog."},
         19: {title: "Rafter", description: "Rafter."},
         20: {title: "Dog", description: "Dog."},
-        21: {title: "Bed with elk", description: "Bed with elk and moose."}
+        21: {title: "Bed with elk", description: "Bed with elk and moose."},
+        22: {title: "Bed with elk front view", description: "Bed with elk and moose front view."},
+        23: {title: "Troll 6m", description: "Troll. About 6 meters tall."},
+        24: {title: "Buratino", description: "Buratino."},
+        25: {title: "Ludwig van Beethoven", description: "Ludwig van Beethoven."},
+        26: {title: "Aries", description: "Aries."},
+        27: {title: "Bed with snakes", description: "Bed with snakes."},
     },
 };
 
@@ -256,8 +289,10 @@ interface LanguageContextValue {
     setLang: (l: Lang) => void;
     t: (key: string) => string;
     tCategory: (cat: string) => string;
-    tItem: (id: number, field: "title" | "description", fallback: string) => string;
+    tItem: (item: LocalizedGalleryItem, field: "title" | "description", fallback: string) => string;
 }
+
+type LocalizedGalleryItem = Pick<GalleryItem, "id" | "title" | "description" | "titleEt" | "titleEn" | "descriptionEt" | "descriptionEn">;
 
 const LanguageContext = createContext<LanguageContextValue | undefined>(undefined);
 
@@ -285,8 +320,17 @@ export const LanguageProvider = ({children}: { children: ReactNode }) => {
         [lang]
     );
     const tItem = useCallback(
-        (id: number, field: "title" | "description", fallback: string) =>
-            itemTranslations[lang]?.[id]?.[field] ?? fallback,
+        (
+            item: LocalizedGalleryItem,
+            field: "title" | "description",
+            fallback: string
+        ) => {
+            const localizedField = ((field === "title"
+                ? (lang === "et" ? item?.titleEt : item?.titleEn)
+                : (lang === "et" ? item?.descriptionEt : item?.descriptionEn)) ?? "") as string;
+
+            return localizedField.trim() || itemTranslations[lang]?.[item.id]?.[field] || fallback;
+        },
         [lang]
     );
 

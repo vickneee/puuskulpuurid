@@ -19,6 +19,12 @@ import gallery18 from "@/assets/gallery-18.jpg";
 import gallery19 from "@/assets/gallery-19.jpg";
 import gallery20 from "@/assets/gallery-20.jpg";
 import gallery21 from "@/assets/gallery-21.jpg";
+import gallery22 from "@/assets/gallery-22.jpg";
+import gallery23 from "@/assets/gallery-23.jpg";
+import gallery24 from "@/assets/gallery-24.jpg";
+import gallery25 from "@/assets/gallery-25.jpg";
+import gallery26 from "@/assets/gallery-26.jpg";
+import gallery27 from "@/assets/gallery-27.jpg";
 import {
     collection,
     deleteDoc,
@@ -38,9 +44,19 @@ export interface GalleryItem {
     src: string;
     title: string;
     description: string;
+    titleEt?: string;
+    titleEn?: string;
+    descriptionEt?: string;
+    descriptionEn?: string;
     category: string;
     featured?: boolean;
     imagePath?: string;
+}
+
+export interface CategoryEntry {
+    key: string;
+    titleEt: string;
+    titleEn: string;
 }
 
 const defaultItems: GalleryItem[] = [
@@ -84,13 +100,58 @@ const defaultItems: GalleryItem[] = [
     {id: 19, src: gallery19, title: "Sarikas", description: "Sarikas.", category: "Decor"},
     {id: 20, src: gallery20, title: "Koer", description: "Koer.", category: "Animals"},
     {id: 21, src: gallery21, title: "Voodi hirvega", description: "Voodi hirve ja põdraga.", category: "Furniture"},
+    {id: 22, src: gallery22, title: "Voodi hirvega otsevaade", description: "Voodi hirve ja põdraga otsevaade.", category: "Furniture"},
+    {id: 23, src: gallery23, title: "Troll 5m", description: "Troll. Üle 5 meetri kõrgune.", category: "Characters"},
+    {id: 24, src: gallery24, title: "Buratiino", description: "Buratiino.", category: "Characters"},
+    {id: 25, src: gallery25, title: "Ludwig van Beethoven", description: "Ludwig van Beethoven.", category: "Figures"},
+    {id: 26, src: gallery26, title: "Oinas", description: "Oinas.", category: "Animals"},
+    {id: 27, src: gallery27, title: "Voodi madudega", description: "Voodi madudega.", category: "Furniture"},
 ];
 
 const GALLERY_COLLECTION = "galleryItems";
 const SETTINGS_COLLECTION = "siteContent";
 const SETTINGS_DOC_ID = "gallery";
 
-const defaultCategories = ["Animals", "Characters", "Decor", "Figures", "Furniture"];
+
+const defaultCategoryEntries: CategoryEntry[] = [
+    { key: "Animals", titleEt: "Loomad", titleEn: "Animals" },
+    { key: "Characters", titleEt: "Karakterid", titleEn: "Characters" },
+    { key: "Decor", titleEt: "Dekoratsioon", titleEn: "Decor" },
+    { key: "Figures", titleEt: "Figuurid", titleEn: "Figures" },
+    { key: "Furniture", titleEt: "Mööbel", titleEn: "Furniture" },
+];
+
+const categoryAliases: Record<string, string> = {
+    Animals: "Animals",
+    Animal: "Animals",
+    Loomad: "Animals",
+    Characters: "Characters",
+    Karakterid: "Characters",
+    Figures: "Figures",
+    Figuurid: "Figures",
+    Decor: "Decor",
+    Dekoratsioon: "Decor",
+    Furniture: "Furniture",
+    Mööbel: "Furniture",
+};
+
+const normalizeCategory = (category: string) => categoryAliases[category] ?? category;
+
+const normalizeCategoryEntry = (entry: CategoryEntry | string): CategoryEntry => {
+    if (typeof entry === "string") {
+        const key = normalizeCategory(entry);
+        const defaultEntry = defaultCategoryEntries.find((item) => item.key === key);
+        return defaultEntry ?? { key, titleEt: entry, titleEn: key };
+    }
+
+    const key = normalizeCategory(entry.key || entry.titleEn || entry.titleEt);
+    const defaultEntry = defaultCategoryEntries.find((item) => item.key === key);
+    return {
+        key,
+        titleEt: entry.titleEt?.trim() || defaultEntry?.titleEt || entry.titleEn || key,
+        titleEn: entry.titleEn?.trim() || defaultEntry?.titleEn || key,
+    };
+};
 
 const categoriesRef = db
     ? doc(db, SETTINGS_COLLECTION, SETTINGS_DOC_ID)
@@ -110,7 +171,11 @@ const toItem = (galleryDoc: QueryDocumentSnapshot<DocumentData> | {
         src: String(data.src),
         title: String(data.title),
         description: String(data.description),
-        category: String(data.category),
+        titleEt: typeof data.titleEt === "string" ? data.titleEt : undefined,
+        titleEn: typeof data.titleEn === "string" ? data.titleEn : undefined,
+        descriptionEt: typeof data.descriptionEt === "string" ? data.descriptionEt : undefined,
+        descriptionEn: typeof data.descriptionEn === "string" ? data.descriptionEn : undefined,
+        category: normalizeCategory(String(data.category)),
         featured: Boolean(data.featured),
         imagePath: typeof data.imagePath === "string" ? data.imagePath : undefined,
     };
@@ -212,25 +277,48 @@ const withFriendlyWriteError = async <T, >(operation: () => Promise<T>) => {
 };
 
 export async function getCategories(): Promise<string[]> {
+    const entries = await getCategoryEntries();
+    return entries.map((entry) => entry.key);
+}
+
+export async function getCategoryEntries(): Promise<CategoryEntry[]> {
     if (!hasFirebase || !db || !categoriesRef) {
-        return defaultCategories;
+        return defaultCategoryEntries;
     }
 
     const snapshot = await getDoc(categoriesRef).catch(() => null);
-    if (!snapshot || !snapshot.exists()) return defaultCategories;
-    const categories = snapshot.data()?.categories;
-    return Array.isArray(categories) && categories.every((cat) => typeof cat === "string")
-        ? categories
-        : defaultCategories;
+    if (!snapshot || !snapshot.exists()) return defaultCategoryEntries;
+
+    const data = snapshot.data() ?? {};
+    const entries = Array.isArray(data.categoryEntries)
+        ? data.categoryEntries.map((entry) => normalizeCategoryEntry(entry))
+        : Array.isArray(data.categories) && data.categories.every((cat) => typeof cat === "string")
+            ? Array.from(new Set(data.categories.map((cat: string) => normalizeCategory(cat)))).map((key) => normalizeCategoryEntry(key))
+            : defaultCategoryEntries;
+
+    return entries;
 }
 
 export async function saveCategories(categories: string[]) {
+    const entries = categories.map((cat) => normalizeCategoryEntry(cat));
+    await saveCategoryEntries(entries);
+}
+
+export async function saveCategoryEntries(entries: CategoryEntry[]) {
     if (!hasFirebase || !db || !categoriesRef) {
         throw new Error("Firebase disabled. Categories cannot be saved without a database connection.");
     }
 
     await requireAdminUser();
-    await withFriendlyWriteError(() => setDoc(categoriesRef!, {categories}, {merge: true}));
+    const normalized = Array.from(new Map(entries.map((entry) => {
+        const normalizedEntry = normalizeCategoryEntry(entry);
+        return [normalizedEntry.key, normalizedEntry] as const;
+    })).values());
+
+    await withFriendlyWriteError(() => setDoc(categoriesRef!, {
+        categories: normalized.map((entry) => entry.key),
+        categoryEntries: normalized,
+    }, {merge: true}));
 }
 
 export async function getGalleryItems(): Promise<GalleryItem[]> {
@@ -280,6 +368,7 @@ export async function updateGalleryItem(
         ...updates,
         src,
         imagePath,
+        category: normalizeCategory(updates.category ?? existing.category),
     };
 
     await requireAdminUser();
@@ -300,7 +389,7 @@ export async function addGalleryItem(
     const id = getNextId(items);
     const imagePath = makeStoragePath(id, file.name);
       const src = bustCache(await withFriendlyWriteError(() => uploadImageFromSource(file, imagePath)));
-    const newItem: GalleryItem = {id, src, imagePath, ...data};
+    const newItem: GalleryItem = {id, src, imagePath, ...data, category: normalizeCategory(data.category)};
     await withFriendlyWriteError(() => setDoc(doc(db!, GALLERY_COLLECTION, String(id)), newItem));
     return newItem;
 }
