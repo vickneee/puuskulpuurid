@@ -15,6 +15,9 @@ import gallery14 from "@/assets/gallery-14.jpg";
 import gallery15 from "@/assets/gallery-15.jpg";
 import gallery16 from "@/assets/gallery-16.jpg";
 import gallery17 from "@/assets/gallery-17.jpg";
+import gallery18 from "@/assets/gallery-18.jpg";
+import gallery19 from "@/assets/gallery-19.jpg";
+import gallery20 from "@/assets/gallery-20.jpg";
 import {
     collection,
     deleteDoc,
@@ -76,6 +79,9 @@ const defaultItems: GalleryItem[] = [
     {id: 15, src: gallery15, title: "Sarikas", description: "Sarikas.", category: "Decor"},
     {id: 16, src: gallery16, title: "Voodi", description: "Voodi karudega.", category: "Furniture"},
     {id: 17, src: gallery17, title: "Koer", description: "Puidust koer.", category: "Animals"},
+    {id: 18, src: gallery18, title: "Koer", description: "Koer.", category: "Animals"},
+    {id: 19, src: gallery19, title: "Sarikas", description: "Sarikas.", category: "Decor"},
+    {id: 20, src: gallery20, title: "Koer", description: "Koer.", category: "Animals"},
 ];
 
 const GALLERY_COLLECTION = "galleryItems";
