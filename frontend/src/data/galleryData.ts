@@ -25,6 +25,19 @@ import gallery24 from "@/assets/gallery-24.jpg";
 import gallery25 from "@/assets/gallery-25.jpg";
 import gallery26 from "@/assets/gallery-26.jpg";
 import gallery27 from "@/assets/gallery-27.jpg";
+import gallery28 from "@/assets/gallery-28.jpg";
+import gallery29 from "@/assets/gallery-29.jpg";
+import gallery30 from "@/assets/gallery-30.jpg";
+import gallery31 from "@/assets/gallery-31.jpg";
+import gallery32 from "@/assets/gallery-32.jpg";
+import gallery33 from "@/assets/gallery-33.jpg";
+import gallery34 from "@/assets/gallery-34.jpg";
+import gallery35 from "@/assets/gallery-35.jpg";
+import gallery36 from "@/assets/gallery-36.jpg";
+import gallery37 from "@/assets/gallery-37.jpg";
+import gallery38 from "@/assets/gallery-38.jpg";
+import gallery39 from "@/assets/gallery-39.jpg";
+import gallery40 from "@/assets/gallery-40.jpg";
 import {
     collection,
     deleteDoc,
@@ -90,8 +103,8 @@ const defaultItems: GalleryItem[] = [
     {id: 9, src: gallery9, title: "Kobras", description: "Puidust kobras.", category: "Animals"},
     {id: 10, src: gallery10, title: "Aia dekoratsioon", description: "Aia dekoratsioon.", category: "Decor"},
     {id: 11, src: gallery11, title: "Otepää künkad", description: "Otepää künkad.", category: "Decor"},
-    {id: 12, src: gallery12, title: "Voodi", description: "Öökullidega voodi.", category: "Furniture"},
-    {id: 13, src: gallery13, title: "Öökullid", description: "Öökullid.", category: "Animals"},
+    {id: 12, src: gallery12, title: "Voodi öökullidega", description: "Öökullidega voodi.", category: "Furniture"},
+    {id: 13, src: gallery13, title: "Kolm öökulli", description: "Kolm öökulli.", category: "Animals"},
     {id: 14, src: gallery14, title: "Merineitsi", description: "Merineitsi.", category: "Decor"},
     {id: 15, src: gallery15, title: "Sarikas", description: "Sarikas.", category: "Decor"},
     {id: 16, src: gallery16, title: "Voodi", description: "Voodi karudega.", category: "Furniture"},
@@ -106,6 +119,19 @@ const defaultItems: GalleryItem[] = [
     {id: 25, src: gallery25, title: "Ludwig van Beethoven", description: "Ludwig van Beethoven.", category: "Figures"},
     {id: 26, src: gallery26, title: "Oinas", description: "Oinas.", category: "Animals"},
     {id: 27, src: gallery27, title: "Voodi madudega", description: "Voodi madudega.", category: "Furniture"},
+    {id: 28, src: gallery28, title: "Laud saare puust 2,5m", description: "Laud saare puust. Pikkus 2,5 meetrit.", category: "Furniture"},
+    {id: 29, src: gallery29, title: "Albert", description: "Albert.", category: "Figures"},
+    {id: 30, src: gallery30, title: "Albert Einstein", description: "Albert Einstein.", category: "Figures"},
+    {id: 31, src: gallery31, title: "Sarikas", description: "Sarikas.", category: "Decor"},
+    {id: 32, src: gallery32, title: "Shrek", description: "Shrek.", category: "Characters"},
+    {id: 33, src: gallery33, title: "Eesel", description: "Eesel.", category: "Characters"},
+    {id: 34, src: gallery34, title: "Kaamel", description: "Kaamel.", category: "Animals"},
+    {id: 35, src: gallery35, title: "Jahimehe voodi", description: "Jahimehe voodi.", category: "Furniture"},
+    {id: 36, src: gallery36, title: "Jahimehe voodi otsevaade", description: "Jahimehe voodi otsevaade.", category: "Furniture"},
+    {id: 37, src: gallery37, title: "Poni mõõdus hobune", description: "Poni mõõdus hobune.", category: "Animals"},
+    {id: 38, src: gallery38, title: "Hirv", description: "Hirv.", category: "Animals"},
+    {id: 39, src: gallery39, title: "Naise figuur", description: "Naise figuur.", category: "Figures"},
+    {id: 40, src: gallery40, title: "Laud 3.2m x 1,7m", description: "Laud 3,2 x 1,7m .", category: "Furniture"},
 ];
 
 const GALLERY_COLLECTION = "galleryItems";
