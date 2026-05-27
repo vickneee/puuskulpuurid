@@ -240,7 +240,7 @@ const itemTranslations: Record<Lang, ItemDict> = {
         40: {title: "Laud 3,2 x 1,7m", description: "Puust laud. Pikkus 3,2 meetrit, laius 1,7 meetrit."},
         41: {title: "Koer", description: "Koer."},
         42: {title: "Karu", description: "Karu."},
-        43: {title: "Voodi loomadega", description: "Voodi loomadega."},
+        43: {title: "Voodi metsloomadega", description: "Voodi metsloomadega."},
         44: {title: "Ilves", description: "Ilves."},
         45: {title: "Sarikas", description: "Sarikas."},
         46: {title: "Koer", description: "Koer."},
@@ -256,6 +256,7 @@ const itemTranslations: Record<Lang, ItemDict> = {
         56: {title: "Kilpkonnad", description: "Kilpkonnad."},
         57: {title: "Ilves", description: "Ilves."},
         58: {title: "Põder II", description: "Põder II."},
+        59: {title: "Voodi gorilladega", description: "Voodi gorilladega."},
 
     },
     en: {
@@ -317,6 +318,7 @@ const itemTranslations: Record<Lang, ItemDict> = {
         56: {title: "Turtles", description: "Turtles."},
         57: {title: "Lynx", description: "Lynx."},
         58: {title: "Moose II", description: "Moose II."},
+        59: {title: "Bed with gorillas", description: "Bed with gorillas."},
     },
 };
 
@@ -329,11 +331,11 @@ const categoryTranslations
         Characters: "Karakterid",
         Figures: "Figuurid",
         Furniture: "Mööbel",
-        Dekoratsioon: "Dekoratsioon",
-        Loomad: "Loomad",
-        Karakterid: "Karakterid",
-        Figuurid: "Figuurid",
-        Mööbel: "Mööbel",
+        // Dekoratsioon: "Dekoratsioon",
+        // Loomad: "Loomad",
+        // Karakterid: "Karakterid",
+        // Figuurid: "Figuurid",
+        // Moobel: "Mööbel",
     },
     en: {
         Decor: "Decor",
@@ -341,11 +343,11 @@ const categoryTranslations
         Characters: "Characters",
         Figures: "Figures",
         Furniture: "Furniture",
-        Dekoratsioon: "Decor",
-        Loomad: "Animals",
-        Karakterid: "Characters",
-        Figuurid: "Figures",
-        Mööbel: "Furniture",
+        // Dekoratsioon: "Decor",
+        // Loomad: "Animals",
+        // Karakterid: "Characters",
+        // Figuurid: "Figures",
+        // Moobel: "Furniture",
     },
 };
 
