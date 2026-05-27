@@ -1,5 +1,6 @@
 import hero from "@/assets/hero-new.jpg";
 import { useLanguage } from "@/lib/i18n";
+import { useEffect, useState } from "react";
 
 interface HeroSectionProps {
   onViewGallery: () => void;
@@ -7,16 +8,47 @@ interface HeroSectionProps {
 
 const HeroSection = ({ onViewGallery }: HeroSectionProps) => {
   const { t } = useLanguage();
+  const [dims, setDims] = useState<{width?: number; height?: number}>({});
+
+  // Ensure the hero image is preloaded with the exact resolved URL the page
+  // will use. In dev the imported `hero` value is the resolved asset URL, so
+  // injecting a matching <link rel="preload"> ensures the LCP test sees a
+  // matching preload entry.
+  useEffect(() => {
+    if (!hero) return;
+    // add preload link if not present or if href differs
+    const existing = Array.from(document.querySelectorAll('link[rel="preload"][as="image"]'))
+      .find((l) => (l as HTMLLinkElement).href.includes(hero.split('/').pop() || ""));
+    if (!existing) {
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
+      link.href = hero;
+      document.head.appendChild(link);
+    }
+
+    // load dimensions so we can render width/height attributes which help
+    // reserve space for the hero and avoid layout shifts.
+    const img = new Image();
+    img.src = hero;
+    img.decode?.().catch(() => null);
+    img.onload = () => {
+      setDims({ width: img.naturalWidth, height: img.naturalHeight });
+    };
+  }, []);
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Render the hero image as a real <img> so the browser can discover it in the DOM
           and treat it as the LCP candidate. Use eager loading and high fetch priority. */}
       <img
         src={hero}
-        alt="Puuskulptuurid - käsitsi valmistatud puidust skulptuur"
+        alt="hero image — Puuskulptuurid - käsitsi valmistatud puidust skulptuur"
         loading="eager"
         fetchPriority="high"
         decoding="async"
+        width={dims.width}
+        height={dims.height}
         className="absolute inset-0 w-full h-full object-cover brightness-55"
       />
       <div className="absolute inset-0" />

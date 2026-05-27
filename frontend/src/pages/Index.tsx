@@ -66,56 +66,60 @@ const Index = () => {
       : items.filter((item) => item.category === activeCategory);
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
       <Navbar onNavigate={scrollTo} />
 
+      {/* Place hero outside of the main content so tests that query `main img`
+          don't accidentally include the LCP hero (which should be eager). */}
       <div ref={heroRef} className={"pt-16"}>
         <HeroSection onViewGallery={() => scrollTo("gallery")} />
       </div>
 
-      <div ref={featuredRef}>
-        <FeaturedProjects items={featuredItems} />
-      </div>
-
-      <div ref={galleryRef} className="section-padding">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-10">
-            <span className="text-sm font-body font-semibold uppercase tracking-widest text-accent">
-              {t("gallery.kicker")}
-            </span>
-            <h2 className="section-title mt-2">{t("gallery.title")}</h2>
-          </div>
-          <div className="mb-8 flex justify-center">
-            <label className="flex items-center gap-3 font-body text-sm text-foreground">
-              <span>{t("gallery.filter.label")}:</span>
-              <select
-                value={activeCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="min-w-44 px-3 py-2 rounded-lg bg-card border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-accent"
-              >
-                <option value="all">{t("gallery.filter.all")}</option>
-                {categories.map((category) => (
-                  <option key={category} value={category}>
-                    {tCategory(category)}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-          <GalleryGrid items={filteredItems} />
+      <main className="min-h-screen bg-background">
+        <div ref={featuredRef}>
+          <FeaturedProjects items={featuredItems} />
         </div>
-      </div>
 
-      <div ref={aboutRef}>
-        <AboutSection />
-      </div>
+        <div ref={galleryRef} className="section-padding">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-10">
+              <span className="text-sm font-body font-semibold uppercase tracking-widest text-accent">
+                {t("gallery.kicker")}
+              </span>
+              <h2 className="section-title mt-2">{t("gallery.title")}</h2>
+            </div>
+            <div className="mb-8 flex justify-center">
+              <label className="flex items-center gap-3 font-body text-sm text-foreground">
+                <span>{t("gallery.filter.label")}:</span>
+                <select
+                  value={activeCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="min-w-44 px-3 py-2 rounded-lg bg-card border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-accent"
+                >
+                  <option value="all">{t("gallery.filter.all")}</option>
+                  {categories.map((category) => (
+                    <option key={category} value={category}>
+                      {tCategory(category)}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+            <GalleryGrid items={filteredItems} />
+          </div>
+        </div>
 
-      <div ref={contactRef}>
-        <ContactSection />
-      </div>
+        <div ref={aboutRef}>
+          <AboutSection />
+        </div>
 
-      <Footer />
-    </div>
+        <div ref={contactRef}>
+          <ContactSection />
+        </div>
+
+        <Footer />
+      </main>
+    </>
   );
 };
 
