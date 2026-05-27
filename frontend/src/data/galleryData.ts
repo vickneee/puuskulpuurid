@@ -38,6 +38,24 @@ import gallery37 from "@/assets/gallery-37.jpg";
 import gallery38 from "@/assets/gallery-38.jpg";
 import gallery39 from "@/assets/gallery-39.jpg";
 import gallery40 from "@/assets/gallery-40.jpg";
+import gallery41 from "@/assets/gallery-41.jpg";
+import gallery42 from "@/assets/gallery-42.jpg";
+import gallery43 from "@/assets/gallery-43.jpg";
+import gallery44 from "@/assets/gallery-44.jpg";
+import gallery45 from "@/assets/gallery-45.jpg";
+import gallery46 from "@/assets/gallery-46.jpg";
+import gallery47 from "@/assets/gallery-47.jpg";
+import gallery48 from "@/assets/gallery-48.jpg";
+import gallery49 from "@/assets/gallery-49.jpg";
+import gallery50 from "@/assets/gallery-50.jpg";
+import gallery51 from "@/assets/gallery-51.jpg";
+import gallery52 from "@/assets/gallery-52.jpg";
+import gallery53 from "@/assets/gallery-53.jpg";
+import gallery54 from "@/assets/gallery-54.jpg";
+import gallery55 from "@/assets/gallery-55.jpg";
+import gallery56 from "@/assets/gallery-56.jpg";
+import gallery57 from "@/assets/gallery-57.jpg";
+import gallery58 from "@/assets/gallery-58.jpg";
 import {
     collection,
     deleteDoc,
@@ -81,11 +99,11 @@ const defaultItems: GalleryItem[] = [
         category: "Characters",
         featured: true
     },
-    {id: 2, src: gallery2, title: "Põder", description: "Käsitsi loodud põder.", category: "Animals", featured: true},
+    {id: 2, src: gallery2, title: "Põder I", description: "Põder I.", category: "Animals", featured: true},
     {id: 3, src: gallery3, title: "Koerad", description: "Käsitsi loodud koerad.", category: "Animals"},
     {id: 4, src: gallery4, title: "Mulk", description: "Käsitsi nikerdatud Mulk.", category: "Figures", featured: true},
-    {id: 5, src: gallery5, title: "Tiiger", description: "Käsitsi loodud tiiger.", category: "Animals"},
-    {id: 6, src: gallery6, title: "Madu", description: "Puidust madu. Kõrgus 8 meetrit.", category: "Animals"},
+    {id: 5, src: gallery5, title: "Tiiger", description: "Käsitsi loodud tiiger.", category: "Animals", featured: true},
+    {id: 6, src: gallery6, title: "Madu", description: "Puidust madu. Kõrgus 8 meetrit.", category: "Animals", featured: true},
     {
         id: 7,
         src: gallery7,
@@ -96,8 +114,8 @@ const defaultItems: GalleryItem[] = [
     {
         id: 8,
         src: gallery8,
-        title: "Ajalooline mees",
-        description: "Käsitsi loodud ajalooline mees.",
+        title: "Ludwig van Beethoven",
+        description: "Ludwig van Beethoven.",
         category: "Figures"
     },
     {id: 9, src: gallery9, title: "Kobras", description: "Puidust kobras.", category: "Animals"},
@@ -120,18 +138,36 @@ const defaultItems: GalleryItem[] = [
     {id: 26, src: gallery26, title: "Oinas", description: "Oinas.", category: "Animals"},
     {id: 27, src: gallery27, title: "Voodi madudega", description: "Voodi madudega.", category: "Furniture"},
     {id: 28, src: gallery28, title: "Laud saare puust 2,5m", description: "Laud saare puust. Pikkus 2,5 meetrit.", category: "Furniture"},
-    {id: 29, src: gallery29, title: "Albert", description: "Albert.", category: "Figures"},
+    {id: 29, src: gallery29, title: "Albert", description: "Albert.", category: "Figures", featured: true},
     {id: 30, src: gallery30, title: "Albert Einstein", description: "Albert Einstein.", category: "Figures"},
     {id: 31, src: gallery31, title: "Sarikas", description: "Sarikas.", category: "Decor"},
     {id: 32, src: gallery32, title: "Shrek", description: "Shrek.", category: "Characters"},
     {id: 33, src: gallery33, title: "Eesel", description: "Eesel.", category: "Characters"},
     {id: 34, src: gallery34, title: "Kaamel", description: "Kaamel.", category: "Animals"},
-    {id: 35, src: gallery35, title: "Jahimehe voodi", description: "Jahimehe voodi.", category: "Furniture"},
-    {id: 36, src: gallery36, title: "Jahimehe voodi otsevaade", description: "Jahimehe voodi otsevaade.", category: "Furniture"},
-    {id: 37, src: gallery37, title: "Poni mõõdus hobune", description: "Poni mõõdus hobune.", category: "Animals"},
+    {id: 35, src: gallery35, title: "Jahimehe voodi", description: "Jahimehe voodi.", category: "Furniture", featured: true},
+    {id: 36, src: gallery36, title: "Jahimehe voodi otsevaade", description: "Jahimehe voodi otsevaade.", category: "Furniture", featured: true},
+    {id: 37, src: gallery37, title: "Hirv", description: "Hirv.", category: "Animals"},
     {id: 38, src: gallery38, title: "Hirv", description: "Hirv.", category: "Animals"},
     {id: 39, src: gallery39, title: "Naise figuur", description: "Naise figuur.", category: "Figures"},
-    {id: 40, src: gallery40, title: "Laud 3.2m x 1,7m", description: "Laud 3,2 x 1,7m .", category: "Furniture"},
+    {id: 40, src: gallery40, title: "Laud 3.2m x 1,7m", description: "Laud 3,2 x 1,7m.", category: "Furniture"},
+    {id: 41, src: gallery41, title: "Koer", description: "Koer.", category: "Animals"},
+    {id: 42, src: gallery42, title: "Karu", description: "Karu.", category: "Animals"},
+    {id: 43, src: gallery43, title: "Voodi loomadega", description: "Voodi loomadega.", category: "Furniture"},
+    {id: 44, src: gallery44, title: "Ilves", description: "Ilves.", category: "Furniture"},
+    {id: 45, src: gallery45, title: "Sarikas", description: "Sarikas.", category: "Decor"},
+    {id: 46, src: gallery46, title: "Koer", description: "Koer.", category: "Animals"},
+    {id: 47, src: gallery47, title: "Voodi jääradega", description: "Voodi jääradega.", category: "Furniture"},
+    {id: 48, src: gallery48, title: "Koer", description: "Koer.", category: "Animals"},
+    {id: 49, src: gallery49, title: "Elizabeth II", description: "Elizabeth II.", category: "Figures"},
+    {id: 50, src: gallery50, title: "Oinas 285kg", description: "Oinas 285kg.", category: "Animals"},
+    {id: 51, src: gallery51, title: "Öökull", description: "Öökull.", category: "Animals"},
+    {id: 52, src: gallery52, title: "Linnud", description: "Lendavad linnud.", category: "Animals"},
+    {id: 53, src: gallery53, title: "Koer", description: "Koer.", category: "Animals"},
+    {id: 54, src: gallery54, title: "Valvur", description: "Valvur.", category: "Figures"},
+    {id: 55, src: gallery55, title: "Valvurid", description: "Valvurid.", category: "Figures"},
+    {id: 56, src: gallery56, title: "Kilpkonnad", description: "Kilpkonnad.", category: "Animals"},
+    {id: 57, src: gallery57, title: "Ilves", description: "Ilves.", category: "Animals"},
+    {id: 58, src: gallery58, title: "Põder II", description: "Põder II.", category: "Animals", featured: true},
 ];
 
 const GALLERY_COLLECTION = "galleryItems";

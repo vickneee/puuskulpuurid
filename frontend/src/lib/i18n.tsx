@@ -1,5 +1,5 @@
 import {createContext, useCallback, useContext, useEffect, useState, type ReactNode} from "react";
-import type { GalleryItem } from "@/data/galleryData";
+import type {GalleryItem} from "@/data/galleryData";
 
 export type Lang = "et" | "en";
 
@@ -205,7 +205,7 @@ const itemTranslations: Record<Lang, ItemDict> = {
         5: {title: "Tiiger", description: "Puidust tiiger."},
         6: {title: "Madu 8m", description: "Puidust madu. Kõrgus 8 meetrit."},
         7: {title: "Ingel 3m", description: "Käsitsi loodud ingel. Üle 3 meetri kõrgune."},
-        8: {title: "Ajalooline mees", description: "Puidust nikerdatud ajalooline mees."},
+        8: {title: "Ludwig van Beethoven", description: "Ludwig van Beethoven."},
         9: {title: "Kobras", description: "Puidust kobras."},
         10: {title: "Aia dekoratsioon", description: "Aia dekoratsioon."},
         11: {title: "Otepää künkad 3m", description: "Otepää künkad. Üle 3 meetri kõrgune."},
@@ -234,10 +234,28 @@ const itemTranslations: Record<Lang, ItemDict> = {
         34: {title: "Kaamel", description: "Puidust kaamel."},
         35: {title: "Jahimehe voodi", description: "Jahimehe voodi."},
         36: {title: "Jahimehe voodi otsevaade", description: "Jahimehe voodi otsevaade."},
-        37: {title: "Poni mõõdus hobune", description: "Poni mõõdus hobune."},
+        37: {title: "Hirv", description: "Hirv."},
         38: {title: "Hirv", description: "Hirv."},
         39: {title: "Poni mõõdus hobune", description: "Poni mõõdus hobune."},
         40: {title: "Laud 3,2 x 1,7m", description: "Puust laud. Pikkus 3,2 meetrit, laius 1,7 meetrit."},
+        41: {title: "Koer", description: "Koer."},
+        42: {title: "Karu", description: "Karu."},
+        43: {title: "Voodi loomadega", description: "Voodi loomadega."},
+        44: {title: "Ilves", description: "Ilves."},
+        45: {title: "Sarikas", description: "Sarikas."},
+        46: {title: "Koer", description: "Koer."},
+        47: {title: "Voodi jääradega", description: "Voodi jääradega."},
+        48: {title: "Koer", description: "Koer."},
+        49: {title: "Elizabeth II", description: "Elizabeth II."},
+        50: {title: "Oinas 285kg", description: "Oinas 285kg."},
+        51: {title: "Öökull", description: "Öökull."},
+        52: {title: "Linnud", description: "Lendavad linnud."},
+        53: {title: "Koer", description: "Koer."},
+        54: {title: "Valvur", description: "Valvur."},
+        55: {title: "Valvurid", description: "Valvurid."},
+        56: {title: "Kilpkonnad", description: "Kilpkonnad."},
+        57: {title: "Ilves", description: "Ilves."},
+        58: {title: "Põder II", description: "Põder II."},
 
     },
     en: {
@@ -248,7 +266,7 @@ const itemTranslations: Record<Lang, ItemDict> = {
         5: {title: "Tiger", description: "Hand-carved tiger."},
         6: {title: "Snake 8m", description: "Hand-carved snake. Height 8 meters."},
         7: {title: "Angel 3m", description: "Hand-carved angel. Over 3 meters tall."},
-        8: {title: "Historical Man", description: "Hand-carved historical man."},
+        8: {title: "Ludwig van Beethoven", description: "Ludwig van Beethoven."},
         9: {title: "Beaver", description: "Wooden beaver."},
         10: {title: "Garden decoration", description: "Garden decoration."},
         11: {title: "Otepää Hills 3m", description: "Otepää hills. Over 3 meters tall."},
@@ -277,14 +295,34 @@ const itemTranslations: Record<Lang, ItemDict> = {
         34: {title: "Camel", description: "Wooden camel."},
         35: {title: "Hunter's bed", description: "Hunter's bed."},
         36: {title: "Hunter's bed front view", description: "Hunter's bed front view."},
-        37: {title: "Poni-sized horse.", description: "Poni-sized horse."},
+        37: {title: "Deer.", description: "Deer."},
         38: {title: "Deer", description: "Deer."},
         39: {title: "Female figure", description: "Female figure."},
         40: {title: "Table size 3,2 x 1,7 m", description: "Wooden table. Length 3,2 meters, width 1,7 meters."},
+        41: {title: "Dog", description: "Dog."},
+        42: {title: "Bear", description: "Bear."},
+        43: {title: "Bed with animals", description: "Bed with animals."},
+        44: {title: "Lynx", description: "Lynx."},
+        45: {title: "Rafter", description: "Rafter."},
+        46: {title: "Dog", description: "Dog."},
+        47: {title: "Bed with rams", description: "Bed with rams."},
+        48: {title: "Dog", description: "Dog."},
+        49: {title: "Elizabeth II", description: "Elizabeth II."},
+        50: {title: "Aries 285kg", description: "Aries 285kg."},
+        51: {title: "Owl", description: "Owl."},
+        52: {title: "Birds", description: "Flying birds."},
+        53: {title: "Dog", description: "Dog."},
+        54: {title: "Guard", description: "Guard."},
+        55: {title: "Guards", description: "Guards."},
+        56: {title: "Turtles", description: "Turtles."},
+        57: {title: "Lynx", description: "Lynx."},
+        58: {title: "Moose II", description: "Moose II."},
     },
 };
 
-const categoryTranslations: Record<Lang, Record<string, string>> = {
+const categoryTranslations
+    :
+    Record<Lang, Record<string, string>> = {
     et: {
         Decor: "Dekoratsioon",
         Animals: "Loomad",
