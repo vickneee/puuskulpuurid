@@ -4,8 +4,10 @@
 
 User-agent: *
 # Allow all except the paths below. Using Disallow with the specific path is widely supported.
+Allow: /
+
 Disallow: /admin
 
 # If you have a sitemap, add its absolute URL below (replace with your production domain):
-Sitemap: https://your-production-domain.example/sitemap.xml
+Sitemap: https://puuskulptuur.com/sitemap.xml
 
