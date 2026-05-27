@@ -9,9 +9,15 @@ const HeroSection = ({ onViewGallery }: HeroSectionProps) => {
   const { t } = useLanguage();
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      <div
-        className="absolute inset-0 bg-cover bg-center brightness-55"
-        style={{ backgroundImage: `url(${hero})` }}
+      {/* Render the hero image as a real <img> so the browser can discover it in the DOM
+          and treat it as the LCP candidate. Use eager loading and high fetch priority. */}
+      <img
+        src={hero}
+        alt="Puuskulptuurid - käsitsi valmistatud puidust skulptuur"
+        loading="eager"
+        fetchPriority="high"
+        decoding="async"
+        className="absolute inset-0 w-full h-full object-cover brightness-55"
       />
       <div className="absolute inset-0" />
       <div className="relative z-10 text-center px-6 max-w-3xl mx-auto">

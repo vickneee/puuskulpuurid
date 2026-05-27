@@ -8,8 +8,12 @@ import { LanguageProvider } from "@/lib/i18n";
 import HomeET from "./pages/HomeET";
 import HomeEN from "./pages/HomeEN";
 import AdminLogin from "./pages/AdminLogin";
-import AdminDashboard from "./pages/AdminDashboard";
-import NotFound from "./pages/NotFound";
+// Lazy-load admin and error pages to reduce initial bundle size and avoid shipping
+// admin-only code to all users up-front.
+import { Suspense, lazy } from "react";
+
+const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
 
@@ -21,14 +25,16 @@ const App = () => (
             <BrowserRouter>
                 <LanguageProvider>
                     <AdminProvider>
-                        <Routes>
-                            <Route path="/" element={<HomeET />} />
-                            <Route path="/en" element={<HomeEN />} />
-                            <Route path="/admin/login" element={<AdminLogin />} />
-                            <Route path="/admin" element={<AdminDashboard />} />
-                            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                            <Route path="*" element={<NotFound />} />
-                        </Routes>
+                        <Suspense fallback={null}>
+                            <Routes>
+                                <Route path="/" element={<HomeET />} />
+                                <Route path="/en" element={<HomeEN />} />
+                                <Route path="/admin/login" element={<AdminLogin />} />
+                                <Route path="/admin" element={<AdminDashboard />} />
+                                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                                <Route path="*" element={<NotFound />} />
+                            </Routes>
+                        </Suspense>
                     </AdminProvider>
                 </LanguageProvider>
             </BrowserRouter>
