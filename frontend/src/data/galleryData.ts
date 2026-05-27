@@ -61,15 +61,15 @@ import {
     collection,
     deleteDoc,
     doc,
+    type DocumentData,
     getDoc,
     getDocs,
     query,
-    setDoc,
-    type DocumentData,
     type QueryDocumentSnapshot,
+    setDoc,
 } from "firebase/firestore";
 import {deleteObject, getDownloadURL, ref, uploadBytes} from "firebase/storage";
-import {hasFirebase, db, storage, auth} from "@/lib/firebase";
+import {auth, db, hasFirebase, storage} from "@/lib/firebase";
 
 export interface GalleryItem {
     id: number;
@@ -354,13 +354,11 @@ export async function getCategoryEntries(): Promise<CategoryEntry[]> {
     if (!snapshot || !snapshot.exists()) return defaultCategoryEntries;
 
     const data = snapshot.data() ?? {};
-    const entries = Array.isArray(data.categoryEntries)
+    return Array.isArray(data.categoryEntries)
         ? data.categoryEntries.map((entry) => normalizeCategoryEntry(entry))
         : Array.isArray(data.categories) && data.categories.every((cat) => typeof cat === "string")
             ? Array.from(new Set(data.categories.map((cat: string) => normalizeCategory(cat)))).map((key) => normalizeCategoryEntry(key))
             : defaultCategoryEntries;
-
-    return entries;
 }
 
 export async function saveCategories(categories: string[]) {
