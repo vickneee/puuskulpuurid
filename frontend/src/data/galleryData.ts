@@ -56,6 +56,7 @@ import gallery55 from "@/assets/gallery-55.jpg";
 import gallery56 from "@/assets/gallery-56.jpg";
 import gallery57 from "@/assets/gallery-57.jpg";
 import gallery58 from "@/assets/gallery-58.jpg";
+import gallery59 from "@/assets/gallery-59.jpg";
 import {
     collection,
     deleteDoc,
@@ -152,7 +153,7 @@ const defaultItems: GalleryItem[] = [
     {id: 40, src: gallery40, title: "Laud 3.2m x 1,7m", description: "Laud 3,2 x 1,7m.", category: "Furniture"},
     {id: 41, src: gallery41, title: "Koer", description: "Koer.", category: "Animals"},
     {id: 42, src: gallery42, title: "Karu", description: "Karu.", category: "Animals"},
-    {id: 43, src: gallery43, title: "Voodi loomadega", description: "Voodi loomadega.", category: "Furniture"},
+    {id: 43, src: gallery43, title: "Voodi metsloomadega", description: "Voodi metsloomadega.", category: "Furniture"},
     {id: 44, src: gallery44, title: "Ilves", description: "Ilves.", category: "Furniture"},
     {id: 45, src: gallery45, title: "Sarikas", description: "Sarikas.", category: "Decor"},
     {id: 46, src: gallery46, title: "Koer", description: "Koer.", category: "Animals"},
@@ -164,10 +165,11 @@ const defaultItems: GalleryItem[] = [
     {id: 52, src: gallery52, title: "Linnud", description: "Lendavad linnud.", category: "Animals"},
     {id: 53, src: gallery53, title: "Koer", description: "Koer.", category: "Animals"},
     {id: 54, src: gallery54, title: "Valvur", description: "Valvur.", category: "Figures"},
-    {id: 55, src: gallery55, title: "Valvurid", description: "Valvurid.", category: "Figures"},
+    {id: 55, src: gallery55, title: "Valvurid", description: "Valvurid.", category: "Decor"},
     {id: 56, src: gallery56, title: "Kilpkonnad", description: "Kilpkonnad.", category: "Animals"},
     {id: 57, src: gallery57, title: "Ilves", description: "Ilves.", category: "Animals"},
     {id: 58, src: gallery58, title: "Põder II", description: "Põder II.", category: "Animals", featured: true},
+    {id: 59, src: gallery59, title: "Voodi gorilladega", description: "Voodi gorilladega.", category: "Furniture"},
 ];
 
 const GALLERY_COLLECTION = "galleryItems";
@@ -194,7 +196,7 @@ const categoryAliases: Record<string, string> = {
     Decor: "Decor",
     Dekoratsioon: "Decor",
     Furniture: "Furniture",
-    Mööbel: "Furniture",
+    Moobel: "Furniture",
 };
 
 const normalizeCategory = (category: string) => categoryAliases[category] ?? category;
