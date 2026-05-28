@@ -5,8 +5,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AdminProvider } from "@/contexts/AdminContext";
 import { LanguageProvider } from "@/lib/i18n";
-import HomeET from "./pages/HomeET";
-import HomeEN from "./pages/HomeEN";
+// import HomeET from "./pages/HomeET";
+// import HomeEN from "./pages/HomeEN";
 import Index from "./pages/Index";
 import AdminLogin from "./pages/AdminLogin";
 // Lazy-load admin and error pages to reduce initial bundle size and avoid shipping
@@ -28,8 +28,8 @@ const App = () => (
                     <AdminProvider>
                         <Suspense fallback={null}>
                             <Routes>
-                                <Route path="/" element={<HomeET />} />
-                                <Route path="/en" element={<HomeEN />} />
+                                <Route path="/" element={<Index />} />
+                                <Route path="/en" element={<Index />} />
                                 {/* dedicated gallery routes so tests can navigate directly */}
                                 <Route path="/gallery" element={<Index />} />
                                 <Route path="/en/gallery" element={<Index />} />
