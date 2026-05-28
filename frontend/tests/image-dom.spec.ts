@@ -68,4 +68,3 @@ test('featured projects images are lazy and have reserved space', async ({ page 
     }
   }
 });
-

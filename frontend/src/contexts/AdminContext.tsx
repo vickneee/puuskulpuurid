@@ -5,12 +5,16 @@ import { AdminContext } from "./admin-context";
 
 export const AdminProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  // Initialize loading based on whether Firebase auth is available to avoid
+  // calling setState synchronously inside the effect when Firebase is
+  // disabled. This prevents the "Calling setState synchronously within an effect"
+  // warning.
+  const [loading, setLoading] = useState<boolean>(() => (auth ? true : false));
 
   useEffect(() => {
     if (!auth) {
-      // Firebase disabled: set user to null and stop loading
-      setLoading(false);
+      // Firebase disabled: nothing to subscribe to
+      // `loading` was initialized accordingly so no setState is needed here.
       return;
     }
 
@@ -32,4 +36,3 @@ export const AdminProvider = ({ children }: { children: ReactNode }) => {
       </AdminContext.Provider>
   );
 };
-
