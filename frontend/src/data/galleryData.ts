@@ -157,7 +157,7 @@ const defaultItems: GalleryItem[] = [
     {id: 41, src: gallery41, title: "Koer", description: "Koer.", category: "Animals"},
     {id: 42, src: gallery42, title: "Karu", description: "Karu.", category: "Animals"},
     {id: 43, src: gallery43, title: "Voodi metsloomadega", description: "Voodi metsloomadega.", category: "Furniture"},
-    {id: 44, src: gallery44, title: "Ilves", description: "Ilves.", category: "Furniture"},
+    {id: 44, src: gallery44, title: "Ilves", description: "Ilves.", category: "Animals"},
     {id: 45, src: gallery45, title: "Sarikas", description: "Sarikas.", category: "Decor"},
     {id: 46, src: gallery46, title: "Koer", description: "Koer.", category: "Animals"},
     {id: 47, src: gallery47, title: "Voodi jääradega", description: "Voodi jääradega.", category: "Furniture"},
