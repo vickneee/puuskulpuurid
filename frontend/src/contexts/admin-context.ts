@@ -14,5 +14,3 @@ export const AdminContext = createContext<AdminContextType>({
   logout: () => {},
   user: null,
 });
-
-

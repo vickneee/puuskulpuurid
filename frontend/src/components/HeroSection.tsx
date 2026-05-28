@@ -30,10 +30,30 @@ const HeroSection = ({ onViewGallery }: HeroSectionProps) => {
     // load dimensions so we can render width/height attributes which help
     // reserve space for the hero and avoid layout shifts.
     const img = new Image();
+    let rafId: number | null = null;
+    const applyDims = () => {
+      // schedule state update outside the sync effect to avoid
+      // "Calling setState synchronously within an effect" warnings
+      rafId = window.requestAnimationFrame(() => {
+        setDims({ width: img.naturalWidth, height: img.naturalHeight });
+      });
+    };
+
     img.src = hero;
     img.decode?.().catch(() => null);
-    img.onload = () => {
-      setDims({ width: img.naturalWidth, height: img.naturalHeight });
+
+    // If the image is already cached, `img.complete` may be true and
+    // onload might run synchronously — use RAF to defer setState.
+    if (img.complete && img.naturalWidth) {
+      applyDims();
+    } else {
+      img.onload = () => applyDims();
+    }
+
+    return () => {
+      if (rafId !== null) window.cancelAnimationFrame(rafId);
+      // remove onload handler to avoid leaks
+      img.onload = null;
     };
   }, []);
 
