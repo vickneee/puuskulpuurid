@@ -370,11 +370,15 @@ type LocalizedGalleryItem = Pick<GalleryItem, "id" | "title" | "description" | "
 const LanguageContext = createContext<LanguageContextValue | undefined>(undefined);
 
 export const LanguageProvider = ({children}: { children: ReactNode }) => {
+    // Initialize language from (1) saved preference, (2) URL prefix (/en), or (3) default to Estonian.
+    // Use a lazy initializer to avoid calling setState inside an effect (which React warns about).
     const [lang, setLangState] = useState<Lang>(() => {
+
         if (typeof window === "undefined") return "et";
 
-        const stored = localStorage.getItem("lang");
-        return stored === "et" || stored === "en" ? stored : "et";
+        return window.location.pathname.startsWith("/en")
+            ? "en"
+            : "et";
     });
 
     useEffect(() => {
@@ -385,6 +389,27 @@ export const LanguageProvider = ({children}: { children: ReactNode }) => {
         setLangState(l);
         localStorage.setItem("lang", l);
         document.documentElement.lang = l;
+
+        // Mirror language in the URL so /en/* routes are used when language is English.
+        // We use history.replaceState to avoid a full page load and to keep navigation smooth.
+        try {
+            const { pathname, search, hash } = window.location;
+            if (l === "en") {
+                if (!pathname.startsWith("/en")) {
+                    const newPath = pathname === "/" ? "/en" : `/en${pathname}`;
+                    window.history.replaceState(null, "", newPath + search + hash);
+                }
+            } else {
+                if (pathname === "/en") {
+                    window.history.replaceState(null, "", "/" + search + hash);
+                } else if (pathname.startsWith("/en/")) {
+                    window.history.replaceState(null, "", pathname.replace(/^\/en/, "") + search + hash);
+                }
+            }
+        } catch (err) {
+            // Silently ignore history errors (e.g. in unusual environments)
+            console.error(err);
+        }
     }, []);
 
     const t = useCallback((key: string) => translations[lang][key] ?? translations.et[key] ?? key, [lang]);
