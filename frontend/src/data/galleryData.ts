@@ -57,6 +57,9 @@ import gallery56 from "@/assets/gallery-56.jpg";
 import gallery57 from "@/assets/gallery-57.jpg";
 import gallery58 from "@/assets/gallery-58.jpg";
 import gallery59 from "@/assets/gallery-59.jpg";
+import gallery60 from "@/assets/gallery-60.jpg";
+import gallery61 from "@/assets/gallery-61.jpg";
+import gallery62 from "@/assets/gallery-62.jpg";
 import {
     collection,
     deleteDoc,
@@ -120,7 +123,7 @@ const defaultItems: GalleryItem[] = [
         category: "Figures"
     },
     {id: 9, src: gallery9, title: "Kobras", description: "Puidust kobras.", category: "Animals"},
-    {id: 10, src: gallery10, title: "Aia dekoratsioon", description: "Aia dekoratsioon.", category: "Decor"},
+    {id: 10, src: gallery10, title: "Aia dekoratsioon", description: "Aia dekoratsioon.", category: "Decor", featured: true},
     {id: 11, src: gallery11, title: "Otepää künkad", description: "Otepää künkad.", category: "Decor"},
     {id: 12, src: gallery12, title: "Voodi öökullidega", description: "Öökullidega voodi.", category: "Furniture"},
     {id: 13, src: gallery13, title: "Kolm öökulli", description: "Kolm öökulli.", category: "Animals"},
@@ -145,8 +148,8 @@ const defaultItems: GalleryItem[] = [
     {id: 32, src: gallery32, title: "Shrek", description: "Shrek.", category: "Characters"},
     {id: 33, src: gallery33, title: "Eesel", description: "Eesel.", category: "Characters"},
     {id: 34, src: gallery34, title: "Kaamel", description: "Kaamel.", category: "Animals"},
-    {id: 35, src: gallery35, title: "Jahimehe voodi", description: "Jahimehe voodi.", category: "Furniture", featured: true},
-    {id: 36, src: gallery36, title: "Jahimehe voodi otsevaade", description: "Jahimehe voodi otsevaade.", category: "Furniture", featured: true},
+    {id: 35, src: gallery35, title: "Jahimehe voodi", description: "Jahimehe voodi.", category: "Furniture"},
+    {id: 36, src: gallery36, title: "Jahimehe voodi otsevaade", description: "Jahimehe voodi otsevaade.", category: "Furniture"},
     {id: 37, src: gallery37, title: "Hirv", description: "Hirv.", category: "Animals"},
     {id: 38, src: gallery38, title: "Hirv", description: "Hirv.", category: "Animals"},
     {id: 39, src: gallery39, title: "Naise figuur", description: "Naise figuur.", category: "Figures"},
@@ -170,6 +173,9 @@ const defaultItems: GalleryItem[] = [
     {id: 57, src: gallery57, title: "Ilves", description: "Ilves.", category: "Animals"},
     {id: 58, src: gallery58, title: "Põder II", description: "Põder II.", category: "Animals", featured: true},
     {id: 59, src: gallery59, title: "Voodi gorilladega", description: "Voodi gorilladega.", category: "Furniture"},
+    {id: 60, src: gallery60, title: "Puidust voodi ots 2000 x 850mm", description: "Puidust voodi ots 2000 x 850mm.", category: "Furniture"},
+    {id: 61, src: gallery61, title: "Faun 3m ja Madu 8m", description: "Faun 3m ja Madu 8m.", category: "Decor", featured: true},
+    {id: 62, src: gallery62, title: "Faun 3m ja Madu 8m ülevalt vaade", description: "Faun 3m ja Madu 8m ülevalt vaade.", category: "Decor"},
 ];
 
 const GALLERY_COLLECTION = "galleryItems";
@@ -187,7 +193,6 @@ const defaultCategoryEntries: CategoryEntry[] = [
 
 const categoryAliases: Record<string, string> = {
     Animals: "Animals",
-    Animal: "Animals",
     Loomad: "Animals",
     Characters: "Characters",
     Karakterid: "Characters",
