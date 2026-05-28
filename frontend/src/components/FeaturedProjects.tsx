@@ -49,6 +49,9 @@ const FeaturedProjects = ({ items }: FeaturedProjectsProps) => {
                   alt={tItem(item, "title", item.title)}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   loading="lazy"
+                  width={800}
+                  height={600}
+                  decoding="async"
                 />
               </div>
               <div className="p-6">

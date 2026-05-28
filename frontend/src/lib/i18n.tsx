@@ -257,6 +257,9 @@ const itemTranslations: Record<Lang, ItemDict> = {
         57: {title: "Ilves", description: "Ilves."},
         58: {title: "Põder II", description: "Põder II."},
         59: {title: "Voodi gorilladega", description: "Voodi gorilladega."},
+        60: {title: "Puidust voodi ots 2000 x 850mm", description: "Puidust voodi ots 2000 x 850mm."},
+        61: {title: "Faun 3m ja Madu 8m", description: "Faun 3m ja Madu 8m."},
+        62: {title: "Faun 3m ja Madu 8m ülevalt vaade", description: "Faun 3m ja Madu 8m ülevalt vaade."},
 
     },
     en: {
@@ -319,6 +322,9 @@ const itemTranslations: Record<Lang, ItemDict> = {
         57: {title: "Lynx", description: "Lynx."},
         58: {title: "Moose II", description: "Moose II."},
         59: {title: "Bed with gorillas", description: "Bed with gorillas."},
+        60: {title: "Carved wooden headboard 2000 x 850mm", description: "Carved wooden headboard 2000 x 850mm."},
+        61: {title: "Faun 3m and Snake 8m", description: "Faun 3m and Snake 8m."},
+        62: {title: "Faun 3m and Snake 8m top view", description: "Faun 3m and Snake 8m top view."},
     },
 };
 

@@ -43,3 +43,29 @@ test('gallery images are lazy and have reserved space', async ({ page }) => {
     }
   }
 });
+
+test('featured projects images are lazy and have reserved space', async ({ page }) => {
+  const imgs = page.locator('main section img'); // featured projects section inside main
+  const count = await imgs.count();
+  expect(count).toBeGreaterThan(0);
+
+  for (let i = 0; i < Math.min(count, 3); i++) {
+    const img = imgs.nth(i);
+    await expect(img).toHaveAttribute('loading', 'lazy');
+
+    const width = await img.getAttribute('width');
+    const height = await img.getAttribute('height');
+    if (width && height) {
+      expect(Number(width)).toBeGreaterThan(0);
+      expect(Number(height)).toBeGreaterThan(0);
+    } else {
+      // check parent reserves space via aspect-ratio
+      const reserved = await img.evaluate((el) => {
+        const p = el.parentElement as HTMLElement;
+        return getComputedStyle(p).aspectRatio || getComputedStyle(el).aspectRatio || '';
+      });
+      expect(reserved).not.toBe('');
+    }
+  }
+});
+
