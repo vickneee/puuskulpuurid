@@ -1,4 +1,5 @@
 import { useRef, useCallback, useState, useEffect } from "react";
+import { ChevronDown } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import GalleryGrid from "@/components/GalleryGrid";
@@ -91,18 +92,24 @@ const Index = () => {
             <div className="mb-8 flex justify-center">
               <label className="flex items-center gap-3 font-body text-sm text-foreground">
                 <span>{t("gallery.filter.label")}:</span>
-                <select
-                  value={activeCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="min-w-44 px-3 py-2 rounded-lg bg-card border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-accent"
-                >
-                  <option value="all">{t("gallery.filter.all")}</option>
-                  {categories.map((category) => (
-                    <option key={category} value={category}>
-                      {tCategory(category)}
-                    </option>
-                  ))}
-                </select>
+                <div className="relative">
+                  <select
+                    value={activeCategory}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                    className="min-w-44 appearance-none pl-3 pr-10 py-2 rounded-lg bg-card border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-accent"
+                  >
+                    <option value="all">{t("gallery.filter.all")}</option>
+                    {categories.map((category) => (
+                      <option key={category} value={category}>
+                        {tCategory(category)}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown
+                    aria-hidden="true"
+                    className="pointer-events-none absolute right-2 top-1/2 h-4 w-4 -translate-y-1/2 text-foreground/70"
+                  />
+                </div>
               </label>
             </div>
             <GalleryGrid items={filteredItems} />
