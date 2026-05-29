@@ -337,11 +337,6 @@ const categoryTranslations
         Characters: "Karakterid",
         Figures: "Figuurid",
         Furniture: "Mööbel",
-        // Dekoratsioon: "Dekoratsioon",
-        // Loomad: "Loomad",
-        // Karakterid: "Karakterid",
-        // Figuurid: "Figuurid",
-        // Moobel: "Mööbel",
     },
     en: {
         Decor: "Decor",
@@ -349,11 +344,6 @@ const categoryTranslations
         Characters: "Characters",
         Figures: "Figures",
         Furniture: "Furniture",
-        // Dekoratsioon: "Decor",
-        // Loomad: "Animals",
-        // Karakterid: "Characters",
-        // Figuurid: "Figures",
-        // Moobel: "Furniture",
     },
 };
 
