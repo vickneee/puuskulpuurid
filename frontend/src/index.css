@@ -47,7 +47,7 @@
     --background: hsl(36 43% 94%);
     --foreground: hsl(25 30% 12%);
 
-    --card: hsl(33 30% 93%);
+    --card: hsl(33 30% 97%);
     --card-foreground: hsl(25 30% 12%);
 
     --popover: hsl(30 25% 96%);
@@ -137,7 +137,7 @@
     --accent-soft: hsl(32 20% 18%);
 
     --shadow-soft: 0 4px 20px -4px hsl(0 0% 0% / 0.5);
-    --shadow-card: 0 2px 12px -2px hsl(0 0% 0% / 0.6);
+    --shadow-card: 0 6px 24px -2px hsl(0 0% 0% / 0.6);
     --shadow-hover: 0 8px 30px -6px hsl(0 0% 0% / 0.7);
   }
 
