@@ -5,10 +5,10 @@ Personal website showcasing a collection of wood sculptures created by Juri Vavu
 ## Tech Stack
 
 - **Frontend**: React, Tailwind CSS
-- **Backend**: Firebase
+- **Backend**: Firebase Firestore for data storage and Firebase Authentication for user management
 - **Hosting**: Cloudflare Pages
 
 ## Features
 
 - **Gallery**: A visually stunning gallery showcasing the wood sculptures with personal images and short descriptions.
-- **Responsive Design**: The website is fully responsive, ensuring a seamless experience across all devices
+- **Responsive Design**: The website is fully responsive, ensuring a seamless experience across all devices.
