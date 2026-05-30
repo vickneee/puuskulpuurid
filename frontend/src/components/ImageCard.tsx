@@ -24,7 +24,7 @@ function ImageWithDims({ src, alt }: ImgProps) {
   }, [src]);
 
   return (
-    <div className="overflow-hidden">
+    <div className="rounded-t-lg overflow-hidden">
       <img
         src={src}
         alt={alt}
@@ -32,7 +32,7 @@ function ImageWithDims({ src, alt }: ImgProps) {
         decoding="async"
         width={dims.width}
         height={dims.height}
-        className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-110 rounded-lg"
+        className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-110"
       />
     </div>
   );

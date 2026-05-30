@@ -110,14 +110,14 @@ const ImageModal = ({ items, currentIndex, isOpen, onClose, onNavigate }: ImageM
       </button>
 
       {/* Content */}
-      <div className="relative max-w-4xl w-full mx-4 animate-zoom-in" style={{ zIndex: 9999999 }}>
+      <div className="relative animate-zoom-in inline-block mx-4" style={{ zIndex: 9999999 }}>
         {/* Keep rounded corners but preserve the image's intrinsic size/ratio. */}
         {/* Use popover background so the sheet follows the theme (light in light mode, dark in dark mode) */}
-        <div className="max-h-[70vh] overflow-hidden rounded-lg bg-popover/95 flex items-center justify-center">
+        <div className="overflow-hidden rounded-lg bg-popover/95">
           <img
             src={item.src}
             alt={tItem(item, "title", item.title)}
-            className="max-h-[70vh] max-w-[90vw] object-contain block"
+            className="max-h-[70vh] max-w-[90vw] object-contain"
           />
         </div>
         <div className="mt-4 text-center">
