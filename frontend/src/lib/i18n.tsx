@@ -32,7 +32,7 @@ const translations: Translations = {
         "about.p1": "Üle 15-aastase kogemusega algab iga skulptuur hoolikalt valitud puidust ja sügavast lugupidamisest looduse vastu. Ühendan traditsioonilise puutööoskuse ja loomingulise käekirja, et luua tugevaid ja ajatuid puidust vorme.",
         "about.p2": "Iga teos kannab oma iseloomu — alates puidu struktuurist kuni käsitsi viimistletud detailideni. Ükski puuskulptuur ei ole täpselt teise sarnane, sest loodus ei korda end kunagi.",
         "about.name": "Juri Vavulin",
-        "about.imgAlt": "Meister LOODUSES",
+        "about.imgAlt": "Põder ja skulptor",
         // Contact
         "contact.kicker": "Võta ühendust",
         "contact.title": "Loome koos",
