@@ -1,4 +1,4 @@
-import hero from "@/assets/hero-new.jpg";
+import hero from "@/assets/hero.jpg";
 import { useLanguage } from "@/lib/i18n";
 import { useEffect, useState } from "react";
 
