@@ -1,6 +1,6 @@
 # Wood Sculptures
 
-Personal website showcasing a collection of wood sculptures created by Juri Vavulin. Each piece is a unique expression of artistry and craftsmanship, reflecting a deep connection to nature and a dedication to the art of woodworking.
+A responsive portfolio website for wood sculptor Juri Vavulin, featuring handcrafted sculptures, multilingual support, SEO optimization, and a modern user experience. Built with React, TypeScript, Tailwind CSS, and Vibe Coding techniques.
 
 ## Tech Stack
 
